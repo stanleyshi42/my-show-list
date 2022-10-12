@@ -60,9 +60,4 @@ public class Tracker {
 		return "Tracker [userID=" + userID + ", showID=" + showID + ", currentEpisode=" + currentEpisode +
 				", currentSeason=" + currentSeason + ", statusID=" + statusID + "]";
 	}
-	
-	public static void main(String args[]) {
-		Tracker tracker = new Tracker(1,1,1,1,1);
-		System.out.println(tracker.toString());
-	}
 }
