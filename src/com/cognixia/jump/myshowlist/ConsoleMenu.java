@@ -115,14 +115,70 @@ public class ConsoleMenu {
 					//TODO
 					break;
 				case 3:
-					//TODO
+					deleteMenu(sc);
 					break;
 				case 4:
 					sessionID = -1;	// Resets current user
 					return;	// Go back to loginMenu
 				}
 			}
-			catch(Exception e) {
+			catch (java.util.InputMismatchException e) {
+				System.out.println("Invalid option");
+				sc.nextLine();
+	        } catch(Exception e) {
+				e.printStackTrace();
+				sc.nextLine();	// Clear scanner buffer
+			}
+		}
+	}
+	private void deleteMenu(Scanner sc) {
+		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
+		System.out.println("==Progress Trackers==");
+		System.out.format("%5s%35s%10s%10s%15s","Index", "Show", "Episodes",
+				"Seasons", "Status");
+		for(int i=0; i<trackers.size();i++) {
+			Tracker t = trackers.get(i);
+			System.out.println();
+			System.out.format("%-5s%35s%10d%10d%15s", i+1, db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
+					t.getCurrentSeason(), db.getStatus(t.getStatusID()));
+			
+		} System.out.println();
+		
+		while(true){
+			try {
+				System.out.println("-------------------------------------");
+				System.out.println("Enter the tracker index to be deleted:");
+				System.out.println("[0] Go back");
+				
+				int userInput=sc.nextInt();
+				
+				if (userInput == 0) {
+					return;	// Go back to userMenu
+				} else if (userInput > 0 && userInput <= trackers.size()) {
+					// delete
+					
+					// reprint trackers
+					System.out.println("==Progress Trackers==");
+					System.out.format("%5s%35s%10s%10s%15s","Index", "Show", "Episodes",
+							"Seasons", "Status");
+					for(int i=0; i<trackers.size();i++) {
+						Tracker t = trackers.get(i);
+						System.out.println();
+						System.out.format("%-5s%35s%10d%10d%15s", i+1, db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
+								t.getCurrentSeason(), db.getStatus(t.getStatusID()));
+						
+					} System.out.println();
+					
+					 //get and display show title
+					System.out.println("Tracker deleted");
+				} else {
+					//
+				}
+			}
+			catch (java.util.InputMismatchException e) {
+				System.out.println("Invalid option");
+				sc.nextLine();
+	        } catch(Exception e) {
 				e.printStackTrace();
 				sc.nextLine();	// Clear scanner buffer
 			}
