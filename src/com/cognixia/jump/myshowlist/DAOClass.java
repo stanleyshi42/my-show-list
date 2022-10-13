@@ -167,6 +167,8 @@ public class DAOClass implements DAO {
 //		
 //		return false;
 //	}
+	
+	// TODO might want to separate DAO into multiple DAOs, one for each table
 
 	@Override
 	public List<Show> getAllShows() {
@@ -216,7 +218,7 @@ public class DAOClass implements DAO {
 			return new Show(showID, title, episodes, seasons);
 		} catch (SQLException e) {
 			System.out.println("\"" + showID + "\" not found.");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return null;
 	}
@@ -229,7 +231,7 @@ public class DAOClass implements DAO {
 	
 	public List<Tracker> getAllUserTrackers(int userID) {
 		try {
-			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Trackers WHERE userID = ?");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Trackers WHERE userID = ? ORDER BY statusID ASC");
 			pstmt.setInt(1, userID);
 			ResultSet rs = pstmt.executeQuery();
 			
@@ -247,7 +249,7 @@ public class DAOClass implements DAO {
 			return trackerList;
 		} catch (SQLException e) {
 			System.out.println("Could not retrieve list of user's trackers from database");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return null;
 	}
@@ -268,7 +270,7 @@ public class DAOClass implements DAO {
 			return new User(id, name, password);
 		} catch (SQLException e) {
 			System.out.println("\"" + username + "\" not found.");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return null;
 	}
@@ -301,7 +303,7 @@ public class DAOClass implements DAO {
 
 			return rs.getString("status");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return null;
 	}
