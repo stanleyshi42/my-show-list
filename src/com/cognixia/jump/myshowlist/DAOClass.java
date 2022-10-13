@@ -293,14 +293,14 @@ public class DAOClass implements DAO {
 	}
 
 	@Override
-	public boolean addUser(User user) {
+	public boolean addUser(String username, String password) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
 				"INSERT INTO Users(username, password) " +
 				"VALUES(?, ?)"
 			);
-			pstmt.setString(1, user.getUsername());
-			pstmt.setString(1, user.getPassword());
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
 			
 			int i = pstmt.executeUpdate();
 			

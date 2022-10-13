@@ -24,7 +24,7 @@ public class ConsoleMenu {
 					loginMenu(sc);
 					break;
 				case 2:
-					System.out.println("Call registerMenu()"); //TODO
+					regMenu(sc);
 					break;
 				case 3:
 					System.out.println("Exiting program");
@@ -85,10 +85,46 @@ public class ConsoleMenu {
 		return null;
 	}
 	
+	private void regMenu(Scanner sc) {
+		sc.nextLine();	// Clear scanner buffer
+		while(true){
+			try {
+				System.out.println("==Register==");
+				System.out.println("Enter your desired username, or hit [Enter] to go back:");
+				String username=sc.nextLine();
+				if(username.isEmpty()) {
+					return;	// Go back to welcomeMenu
+				}
+				System.out.println("Enter your desired password:");
+				String password=sc.nextLine();
+				if(password.isEmpty()) {
+					return;	// Go back to welcomeMenu
+				}
+				
+				boolean added = db.addUser(username, password);
+				// If registration was successful, log the user in
+				if(added) {
+					sessionID = db.getUserByUsername(username).getUser_id();
+					System.out.println("Succesfully registered!");
+					userMenu(sc);
+				}
+				else {
+					System.out.println("User is alreadly registered");
+					return;
+				}
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+				sc.nextLine();
+			}
+		}
+	}
+	
 	private void userMenu(Scanner sc) {
 		// Get and print a user's trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("==Progress Trackers==");
+		
 		System.out.format("%35s%10s%10s%15s", "Show", "Episodes",
 				"Seasons", "Status");
 		for(Tracker t : trackers) {
@@ -172,6 +208,7 @@ public class ConsoleMenu {
 					} System.out.println();
 					
 					 //get and display show title TODO
+					
 					System.out.println("Tracker deleted");
 				} else {
 					//
