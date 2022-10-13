@@ -7,7 +7,6 @@ public class Show {
 	private int seasons;
 
 	public Show(int id, String title, int episodes, int seasons) {
-		super();
 		this.id = id;
 		this.title = title;
 		this.episodes = episodes;
