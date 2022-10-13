@@ -211,6 +211,31 @@ public class DAOClass implements DAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public List<Tracker> getAllUserTrackers(int user_id) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Trackers WHERE user_id = ?");
+			pstmt.setInt(1, user_id);
+			ResultSet rs = pstmt.executeQuery();
+			
+			List<Tracker> trackerList = new ArrayList<Tracker>();
+			
+			while(rs.next()) {
+				int show_id = rs.getInt("show_id");
+				int current_episode = rs.getInt("current_episode");
+				int current_season = rs.getInt("current_season");
+				int status = rs.getInt("status");
+
+				Tracker tracker = new Tracker(user_id, show_id, current_episode, current_season, status);
+				trackerList.add(tracker);
+			}
+			return trackerList;
+		} catch (SQLException e) {
+			System.out.println("Could not retrieve list of user's trackers from database");
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	@Override
 	public User getUserByUsername(String username) {
@@ -227,8 +252,8 @@ public class DAOClass implements DAO {
 
 			return new User(id, name, password);
 		} catch (SQLException e) {
-			System.out.println("Department with name = " + username + " not found.");
-			e.printStackTrace();
+			System.out.println("\"" + username + "\" not found.");
+			//e.printStackTrace();
 		}
 		return null;
 	}
@@ -251,6 +276,19 @@ public class DAOClass implements DAO {
 		return false;
 	}
 
+	public String getStatus(int id) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Statuses WHERE status_id = ?");
+			pstmt.setInt(1, id);
 
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+
+			return rs.getString("status");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 }
