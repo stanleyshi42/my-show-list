@@ -10,6 +10,7 @@ public interface DAO {
     public User getUserByUsername(String username);
     public boolean addTracker(Tracker trak);
     public boolean deleteTracker(Tracker trak);
+    public boolean deleteTrackerByID(int userID, int showID);
     public boolean updateTracker(Tracker trak);
 	
 }

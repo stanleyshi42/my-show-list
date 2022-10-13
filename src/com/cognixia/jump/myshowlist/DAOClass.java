@@ -324,13 +324,71 @@ public class DAOClass implements DAO {
 
 	@Override
 	public boolean addTracker(Tracker trak) {
-		// TODO Auto-generated method stub
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(
+					"INSERT into trackers(userID, showID, currentEpisode, "
+					+ "currentSeason, statusID) values(?, ?, ?, ?, ?)");
+			pstmt.setInt(1, trak.getUserID());
+			pstmt.setInt(2, trak.getShowID());
+			pstmt.setInt(3, trak.getCurrentEpisode());
+			pstmt.setInt(4, trak.getCurrentSeason());
+			pstmt.setInt(5, trak.getStatusID());
+			
+			int i = pstmt.executeUpdate();
+			
+			if(i > 0) {
+				return true;
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean deleteTracker(Tracker trak) {
-		// TODO Auto-generated method stub
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(
+					"DELETE from trackers WHERE userID = ? AND showID = ?");
+			pstmt.setInt(1, trak.getUserID());
+			pstmt.setInt(2, trak.getShowID());
+			
+			int i = pstmt.executeUpdate();
+			
+			if(i > 0) {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Tracker not found.");
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public boolean deleteTrackerByID(int userID, int showID) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(
+					"DELETE from trackers WHERE userID = ? AND showID = ?");
+			pstmt.setInt(1, userID);
+			pstmt.setInt(2, showID);
+			
+			int i = pstmt.executeUpdate();
+			
+			if(i > 0) {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			System.out.println("Tracker for userID - " + "\"" + userID + "\"" + "showID - " 
+					+ "\"" + showID + "\" not found.");
+		}
+		
 		return false;
 	}
 
