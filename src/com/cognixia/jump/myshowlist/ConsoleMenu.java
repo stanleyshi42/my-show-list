@@ -40,6 +40,7 @@ public class ConsoleMenu {
 	        }
 			catch(Exception e) {
 				e.printStackTrace();
+				sc.nextLine();
 			}
 		}
 	}
@@ -69,6 +70,7 @@ public class ConsoleMenu {
 			}
 			catch(Exception e) {
 				e.printStackTrace();
+				sc.nextLine();
 			}
 		}
 	}
@@ -84,13 +86,14 @@ public class ConsoleMenu {
 	}
 	
 	private void userMenu(Scanner sc) {
+		// Get and print a user's trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("==Progress Trackers==");
-		System.out.format("%33s%10s%10s%14s", "Show", "Episodes",
+		System.out.format("%35s%10s%10s%15s", "Show", "Episodes",
 				"Seasons", "Status");
 		for(Tracker t : trackers) {
 			System.out.println();
-			System.out.format("%33s%10d%10d%14s", db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
+			System.out.format("%35s%10d%10d%15s", db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
 					t.getCurrentSeason(), db.getStatus(t.getStatusID()));
 		}
 		
@@ -121,6 +124,7 @@ public class ConsoleMenu {
 			}
 			catch(Exception e) {
 				e.printStackTrace();
+				sc.nextLine();	// Clear scanner buffer
 			}
 		}
 	}
