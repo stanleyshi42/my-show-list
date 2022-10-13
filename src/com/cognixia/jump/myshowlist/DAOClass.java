@@ -8,14 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-//DAO concrete class
-
-// first create class then implement DAO, add unimplemented methods
 public class DAOClass implements DAO {
-	
-	// save connection as attribute so access is easier
 	private Connection conn = ConnManagerWithProperties.getConnection();
-
 	
 //	@Override
 //	public List<Department> getAllDepartments() {
@@ -177,36 +171,27 @@ public class DAOClass implements DAO {
 	@Override
 	public List<Show> getAllShows() {
 		try {
-			// find all the departments...
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Shows");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM shows");
 			
 			List<Show> showList = new ArrayList<Show>();
 			
 			//rs.first();
 			
 			while(rs.next()) {
-				// ...iterate through to get column info...
-				int id = rs.getInt("show_id");
+				int id = rs.getInt("showID");
 				String title = rs.getString("title");
-				int episodes = rs.getInt("episode_count");
-				int seasons = rs.getInt("season_count");
-				
-				
-				// ...then add them to a list...
+				int episodes = rs.getInt("episodeCount");
+				int seasons = rs.getInt("seasonCount");
+
 				Show show = new Show(id, title, episodes, seasons);
 				showList.add(show);
 			}
-			
-			// ...and return that list once finished
 			return showList;
-			
 		} catch (SQLException e) {
 			System.out.println("Could not retrieve list of shows from database");
 		}
-		// return null just in case exception is thrown
 		return null;
-		
 	}
 
 	@Override
@@ -216,21 +201,76 @@ public class DAOClass implements DAO {
 	}
 
 	@Override
-	public Show getShowById(int deptId) {
-		// TODO Auto-generated method stub
+	public Show getShowById(int showID) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM shows WHERE showID = ?");
+			pstmt.setInt(1, showID);
+
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+
+			String title = rs.getString("title");
+			int episodes = rs.getInt("episodeCount");
+			int seasons = rs.getInt("seasonCount");
+
+			return new Show(showID, title, episodes, seasons);
+		} catch (SQLException e) {
+			System.out.println("\"" + showID + "\" not found.");
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
-	public Tracker getTrackerById(int user_id, int show_id) {
+	public Tracker getTrackerById(int userID, int showID) {
 		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public List<Tracker> getAllUserTrackers(int userID) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Trackers WHERE userID = ?");
+			pstmt.setInt(1, userID);
+			ResultSet rs = pstmt.executeQuery();
+			
+			List<Tracker> trackerList = new ArrayList<Tracker>();
+			
+			while(rs.next()) {
+				int showID = rs.getInt("showID");
+				int currentEpisode = rs.getInt("currentEpisode");
+				int currentSeason = rs.getInt("currentSeason");
+				int statusID = rs.getInt("statusID");
+
+				Tracker tracker = new Tracker(userID, showID, currentEpisode, currentSeason, statusID);
+				trackerList.add(tracker);
+			}
+			return trackerList;
+		} catch (SQLException e) {
+			System.out.println("Could not retrieve list of user's trackers from database");
+			e.printStackTrace();
+		}
 		return null;
 	}
 
 	@Override
-	public boolean validateUser(String username, String password) {
-		// TODO Auto-generated method stub
-		return false;
+	public User getUserByUsername(String username) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Users WHERE username = ?");
+			pstmt.setString(1, username);
+
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+
+			int id = rs.getInt("userID");
+			String name = rs.getString("username");
+			String password = rs.getString("password");
+
+			return new User(id, name, password);
+		} catch (SQLException e) {
+			System.out.println("\"" + username + "\" not found.");
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
@@ -251,4 +291,19 @@ public class DAOClass implements DAO {
 		return false;
 	}
 
+	public String getStatus(int id) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Statuses WHERE statusID = ?");
+			pstmt.setInt(1, id);
+
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+
+			return rs.getString("status");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 }
