@@ -174,7 +174,7 @@ public class DAOClass implements DAO {
 	public List<Show> getAllShows() {
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM shows");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM Shows");
 			
 			List<Show> showList = new ArrayList<Show>();
 			
@@ -201,7 +201,7 @@ public class DAOClass implements DAO {
 		try {
 			// find all the departments...
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("select * from Trackers");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM Trackers");
 			
 			List<Tracker> trackerList = new ArrayList<Tracker>();
 			
@@ -222,7 +222,7 @@ public class DAOClass implements DAO {
 			}
 			
 			// ...and return that list once finished
-			//return showList;
+			return trackerList;
 			
 		} catch (SQLException e) {
 			System.out.println("Could not retrieve list of trackers from database");
@@ -337,8 +337,9 @@ public class DAOClass implements DAO {
 	public boolean addTracker(Tracker trak) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
-					"INSERT into trackers(userID, showID, currentEpisode, "
-					+ "currentSeason, statusID) values(?, ?, ?, ?, ?)");
+				"INSERT INTO trackers(userID, showID, currentEpisode, currentSeason, statusID) " +
+				"VALUES(?, ?, ?, ?, ?)"
+			);
 			pstmt.setInt(1, trak.getUserID());
 			pstmt.setInt(2, trak.getShowID());
 			pstmt.setInt(3, trak.getCurrentEpisode());
@@ -350,7 +351,6 @@ public class DAOClass implements DAO {
 			if(i > 0) {
 				return true;
 			}
-			
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -364,7 +364,9 @@ public class DAOClass implements DAO {
 	public boolean deleteTracker(Tracker trak) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
-					"DELETE from trackers WHERE userID = ? AND showID = ?");
+				"DELETE FROM trackers " +
+				"WHERE userID = ? AND showID = ?"
+			);
 			pstmt.setInt(1, trak.getUserID());
 			pstmt.setInt(2, trak.getShowID());
 			
@@ -385,7 +387,9 @@ public class DAOClass implements DAO {
 	public boolean deleteTrackerByID(int userID, int showID) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
-					"DELETE from trackers WHERE userID = ? AND showID = ?");
+				"DELETE FROM trackers " +
+				"WHERE userID = ? AND showID = ?"
+			);
 			pstmt.setInt(1, userID);
 			pstmt.setInt(2, showID);
 			
