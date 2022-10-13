@@ -83,8 +83,7 @@ public class ConsoleMenu {
 		}
 		// Else, return null
 		return null;
-	}
-	
+	}	
 
 	private void printTrackers(List<Tracker> trackers) {
 		System.out.println("==Progress Trackers==");
@@ -97,6 +96,7 @@ public class ConsoleMenu {
 		}
 		System.out.println();
 		System.out.println();
+	}
 
 	private void regMenu(Scanner sc) {
 		sc.nextLine();	// Clear scanner buffer
@@ -216,48 +216,16 @@ public class ConsoleMenu {
 					System.out.println("Tracker for \"" + deletedShow.getTitle() + "\" deleted");
 					deleteMenu(sc);
 					return;	// Return to the previous menu, either a deleteMenu or the userMenu
-					// reprint trackers
-//					trackers = db.getAllUserTrackers(sessionID);
-//					System.out.println("==Progress Trackers==");
-//					System.out.format("%5s%35s%10s%10s%15s","Index", "Show", "Episodes",
-//							"Seasons", "Status");
-//					for(int i=0; i<trackers.size();i++) {
-//						Tracker t = trackers.get(i);
-//						System.out.println();
-//						System.out.format("%-5s%35s%10d%10d%15s", i+1, db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
-//								t.getCurrentSeason(), db.getStatus(t.getStatusID()));
-//						
-//					} System.out.println();
 				} 
-
-					trackers = db.getAllUserTrackers(sessionID);
-					System.out.println("==Progress Trackers==");
-					System.out.format("%5s%35s%10s%10s%15s","Index", "Show", "Episodes",
-							"Seasons", "Status");
-					for(int i=0; i<trackers.size();i++) {
-						Tracker t = trackers.get(i);
-						System.out.println();
-						System.out.format("%-5s%35s%10d%10d%15s", i+1, db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
-								t.getCurrentSeason(), db.getStatus(t.getStatusID()));
-						
-					} System.out.println();
-					
-					 //get and display show title TODO
-					
-					System.out.println("Tracker deleted");
-				} else {
-					//
-				}
-
 			}
 			catch (java.util.InputMismatchException e) {
 				System.out.println("Invalid option");
 				sc.nextLine();
-	        } catch(Exception e) {
+	        } 
+			catch(Exception e) {
 				e.printStackTrace();
 				sc.nextLine();	// Clear scanner buffer
 			}
 		}
 	}
-
 }
