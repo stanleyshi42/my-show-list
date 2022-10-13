@@ -5,7 +5,7 @@ public class Tracker {
 	private int showID;
 	private int currentEpisode;
 	private int currentSeason;
-	private int statusID;
+	protected int statusID;
 	
 	public Tracker(int userID, int showID, int currentEpisode, int currentSeason, int statusID) {
 		this.userID = userID;
