@@ -234,7 +234,9 @@ public class DAOClass implements DAO {
 	@Override
 	public Show getShowById(int showID) {
 		try {
-			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM shows WHERE showID = ?");
+			PreparedStatement pstmt = conn.prepareStatement(
+				"SELECT * FROM shows " +
+				"WHERE showID = ?");
 			pstmt.setInt(1, showID);
 
 			ResultSet rs = pstmt.executeQuery();
@@ -255,8 +257,10 @@ public class DAOClass implements DAO {
 	@Override
 	public Tracker getTrackerById(int userID, int showID) {
 		try {
-			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM trackers "
-					+ "WHERE showID = ? and userID = ?");
+			PreparedStatement pstmt = conn.prepareStatement(
+				"SELECT * FROM trackers " +
+				"WHERE showID = ? and userID = ?"
+			);
 			pstmt.setInt(1, showID);
 			pstmt.setInt(2, userID);
 
@@ -278,7 +282,11 @@ public class DAOClass implements DAO {
 	
 	public List<Tracker> getAllUserTrackers(int userID) {
 		try {
-			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Trackers WHERE userID = ? ORDER BY statusID ASC");
+			PreparedStatement pstmt = conn.prepareStatement(
+				"SELECT * FROM Trackers " +
+				"WHERE userID = ? " +
+				"ORDER BY statusID ASC"
+			);
 			pstmt.setInt(1, userID);
 			ResultSet rs = pstmt.executeQuery();
 			
@@ -304,7 +312,10 @@ public class DAOClass implements DAO {
 	@Override
 	public User getUserByUsername(String username) {
 		try {
-			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Users WHERE username = ?");
+			PreparedStatement pstmt = conn.prepareStatement(
+				"SELECT * FROM Users " +
+				"WHERE username = ?"
+			);
 			pstmt.setString(1, username);
 
 			ResultSet rs = pstmt.executeQuery();
@@ -396,9 +407,11 @@ public class DAOClass implements DAO {
 	public boolean updateTracker(Tracker trak) {
 		// TODO Auto-generated method stub
 		try {
-			PreparedStatement pstmt = conn.prepareStatement("UPDATE Trackers "
-					+ "SET currentEpisode = ?, currentSeason = ?, statusID = ? "
-					+ "WHERE userID = ? AND showID = ?");
+			PreparedStatement pstmt = conn.prepareStatement(
+				"UPDATE Trackers " +
+				"SET currentEpisode = ?, currentSeason = ?, statusID = ? " +
+				"WHERE userID = ? AND showID = ?"
+			);
 			pstmt.setInt(1, trak.getCurrentEpisode());
 			pstmt.setInt(2, trak.getCurrentSeason());
 			pstmt.setInt(3, trak.getStatusID());
@@ -416,7 +429,10 @@ public class DAOClass implements DAO {
 
 	public String getStatus(int id) {
 		try {
-			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Statuses WHERE statusID = ?");
+			PreparedStatement pstmt = conn.prepareStatement(
+				"SELECT * FROM Statuses " +
+				"WHERE statusID = ?"
+			);
 			pstmt.setInt(1, id);
 
 			ResultSet rs = pstmt.executeQuery();
