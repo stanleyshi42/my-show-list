@@ -254,7 +254,25 @@ public class DAOClass implements DAO {
 
 	@Override
 	public Tracker getTrackerById(int userID, int showID) {
-		// TODO Auto-generated method stub
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM trackers "
+					+ "WHERE showID = ? and userID = ?");
+			pstmt.setInt(1, showID);
+			pstmt.setInt(2, userID);
+
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+
+			int episode = rs.getInt("currentEpisode");
+			int season = rs.getInt("currentSeason");
+			int status = rs.getInt("statusID");
+
+			return new Tracker(userID, showID, episode, season, status);
+		} catch (SQLException e) {
+			System.out.println("Tracker for userID - " + "\"" + userID + "\"" + "showID - " 
+								+ "\"" + showID + "\" not found.");
+			//e.printStackTrace();
+		}
 		return null;
 	}
 	
