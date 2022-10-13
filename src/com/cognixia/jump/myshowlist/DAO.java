@@ -11,7 +11,7 @@ import java.util.List;
 		public List <Tracker> getAllTrackers();
 	    public Show getShowById(int deptId);
 	    public Tracker getTrackerById(int user_id, int show_id);
-	    public boolean validateUser(String username, String password);
+	    public User getUserByUsername(String username);
 	    public boolean addTracker(Tracker trak);
 	    public boolean deleteTracker(Tracker trak);
 	    public boolean updateTracker(Tracker trak);

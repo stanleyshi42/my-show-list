@@ -8,14 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-//DAO concrete class
-
-// first create class then implement DAO, add unimplemented methods
 public class DAOClass implements DAO {
-	
-	// save connection as attribute so access is easier
 	private Connection conn = ConnManagerWithProperties.getConnection();
-
 	
 //	@Override
 //	public List<Department> getAllDepartments() {
@@ -177,7 +171,6 @@ public class DAOClass implements DAO {
 	@Override
 	public List<Show> getAllShows() {
 		try {
-			// find all the departments...
 			Statement stmt = conn.createStatement();
 			ResultSet rs = stmt.executeQuery("SELECT * FROM Shows");
 			
@@ -186,27 +179,19 @@ public class DAOClass implements DAO {
 			//rs.first();
 			
 			while(rs.next()) {
-				// ...iterate through to get column info...
 				int id = rs.getInt("show_id");
 				String title = rs.getString("title");
 				int episodes = rs.getInt("episode_count");
 				int seasons = rs.getInt("season_count");
-				
-				
-				// ...then add them to a list...
+
 				Show show = new Show(id, title, episodes, seasons);
 				showList.add(show);
 			}
-			
-			// ...and return that list once finished
 			return showList;
-			
 		} catch (SQLException e) {
 			System.out.println("Could not retrieve list of shows from database");
 		}
-		// return null just in case exception is thrown
 		return null;
-		
 	}
 
 	@Override
@@ -228,9 +213,24 @@ public class DAOClass implements DAO {
 	}
 
 	@Override
-	public boolean validateUser(String username, String password) {
-		// TODO Auto-generated method stub
-		return false;
+	public User getUserByUsername(String username) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Users WHERE username = ?");
+			pstmt.setString(1, username);
+
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+
+			int id = rs.getInt("user_id");
+			String name = rs.getString("username");
+			String password = rs.getString("password");
+
+			return new User(id, name, password);
+		} catch (SQLException e) {
+			System.out.println("Department with name = " + username + " not found.");
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
@@ -251,4 +251,6 @@ public class DAOClass implements DAO {
 		return false;
 	}
 
+
+	
 }
