@@ -156,8 +156,10 @@ public class ConsoleMenu {
 					return;	// Go back to userMenu
 				} else if (userInput > 0 && userInput <= trackers.size()) {
 					// delete
+					db.deleteTracker(trackers.get(userInput-1));
 					
 					// reprint trackers
+					trackers = db.getAllUserTrackers(sessionID);
 					System.out.println("==Progress Trackers==");
 					System.out.format("%5s%35s%10s%10s%15s","Index", "Show", "Episodes",
 							"Seasons", "Status");
