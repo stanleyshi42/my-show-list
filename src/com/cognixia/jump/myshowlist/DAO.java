@@ -8,6 +8,7 @@ public interface DAO {
     public Show getShowById(int showID);
     public Tracker getTrackerById(int userID, int showID);
     public User getUserByUsername(String username);
+    public boolean addUser(String username, String password);
     public boolean addTracker(Tracker trak);
     public boolean deleteTracker(Tracker trak);
     public boolean deleteTrackerByID(int userID, int showID);
