@@ -201,8 +201,23 @@ public class DAOClass implements DAO {
 	}
 
 	@Override
-	public Show getShowById(int deptId) {
-		// TODO Auto-generated method stub
+	public Show getShowById(int showID) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM shows WHERE showID = ?");
+			pstmt.setInt(1, showID);
+
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+
+			String title = rs.getString("title");
+			int episodes = rs.getInt("episodeCount");
+			int seasons = rs.getInt("seasonCount");
+
+			return new Show(showID, title, episodes, seasons);
+		} catch (SQLException e) {
+			System.out.println("\"" + showID + "\" not found.");
+			e.printStackTrace();
+		}
 		return null;
 	}
 
