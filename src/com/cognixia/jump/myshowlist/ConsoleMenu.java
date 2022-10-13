@@ -3,6 +3,8 @@ package com.cognixia.jump.myshowlist;
 import java.util.List;
 import java.util.Scanner;
 
+
+
 public class ConsoleMenu {
 	private DAOClass db = new DAOClass();
 	private int sessionID = -1;	// Tracks which user is currently logged in
@@ -173,6 +175,7 @@ public class ConsoleMenu {
 					break;
 				case 2:
 					//TODO
+					AddMenu(sc);
 					break;
 				case 3:
 					deleteMenu(sc);
@@ -191,6 +194,57 @@ public class ConsoleMenu {
 			}
 		}
 	}
+	
+	
+	private void printAddMenuItems(List<Show> Shows) {
+		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
+		
+							
+		for(int i=0; i<Shows.size(); i++) {
+		Show s = Shows.get(i);
+			System.out.println();
+		System.out.format("%10s%35s%10s%10s%10s", "[" + (int)(i+1) + "] ",
+				db.getShowById(s.getId()).getTitle(), s.getId(), s.getSeasons(), s.getEpisodes());
+		}
+		System.out.println();
+	}
+	
+	private void AddMenu(Scanner sc) {
+		// TODO Auto-generated method stub
+			List<Show> allshows = db.getAllShows(); 
+			List<Tracker> trackers = db.getAllUserTrackers(sessionID);
+			System.out.println("=====Add Menu for All Shows=====");
+			printAddMenuItems(allshows); 
+			while(true) { 
+				System.out.println();
+				System.out.println("Enter a ShowID:");
+			sc.nextInt();		
+			int addmenuoption=sc.nextInt();	
+
+			try {
+				System.out.println("\n Select the show you want to track ");
+				String sc2=sc.nextLine();
+				
+				
+				
+//				Scanner sc2 = new Scanner(System.in);
+//					int userInput2 = sc2.nextInt();
+				
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+						
+			
+
+		
+		
+		
+			}
+	
+		
+	}
+	
 	private void deleteMenu(Scanner sc) {
 		// Print the user's trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
