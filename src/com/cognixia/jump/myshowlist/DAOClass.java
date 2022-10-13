@@ -370,25 +370,5 @@ public class DAOClass implements DAO {
 		}
 		return null;
 	}
-	
-	// Main for debugging
-	public static void main(String[] main) {
-		DAOClass db = new DAOClass();
-		Tracker tracker = new Tracker(1,1,9,1,0);
-		if(db.updateTracker(tracker))
-			System.out.println("Updated");
-		else
-			System.out.println("False");
 
-		List<Tracker> trackers = db.getAllUserTrackers(1);
-		System.out.println("==Progress Trackers==");
-		System.out.format("%35s%10s%10s%15s", "Show", "Episodes",
-				"Seasons", "Status");
-		for(Tracker t : trackers) {
-			System.out.println();
-			System.out.format("%35s%10d%10d%15s", db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
-					t.getCurrentSeason(), db.getStatus(t.getStatusID()));
-		}
-	}
-	
 }
