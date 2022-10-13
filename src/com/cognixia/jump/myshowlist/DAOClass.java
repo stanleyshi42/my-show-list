@@ -198,7 +198,36 @@ public class DAOClass implements DAO {
 
 	@Override
 	public List<Tracker> getAllTrackers() {
-		// TODO Auto-generated method stub
+		try {
+			// find all the departments...
+			Statement stmt = conn.createStatement();
+			ResultSet rs = stmt.executeQuery("select * from Trackers");
+			
+			List<Tracker> trackerList = new ArrayList<Tracker>();
+			
+			//rs.first();
+			
+			while(rs.next()) {
+				// ...iterate through to get column info...
+				int userID = rs.getInt("user_id");
+				int showID = rs.getInt("show_id");
+				int currentEpisode = rs.getInt("current_episode");
+				int currentSeason = rs.getInt("current_season");
+				int statusID = rs.getInt("s_id");
+				
+				
+				// ...then add them to a list...
+				Tracker trak = new Tracker(userID, showID, currentEpisode, currentSeason, statusID);
+				trackerList.add(trak);
+			}
+			
+			// ...and return that list once finished
+			//return showList;
+			
+		} catch (SQLException e) {
+			System.out.println("Could not retrieve list of trackers from database");
+		}
+		// return null just in case exception is thrown
 		return null;
 	}
 
