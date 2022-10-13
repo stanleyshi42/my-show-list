@@ -85,6 +85,19 @@ public class ConsoleMenu {
 		return null;
 	}
 	
+	private void printTrackers(List<Tracker> trackers) {
+		System.out.println("==Progress Trackers==");
+		System.out.format("%35s%10s%10s%15s", "Show", "Episodes",
+				"Seasons", "Status");
+		for(Tracker t : trackers) {
+			System.out.println();
+			System.out.format("%35s%10d%10d%15s", db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
+					t.getCurrentSeason(), db.getStatus(t.getStatusID()));
+		}
+		System.out.println();
+		System.out.println();
+	}
+	
 	private void userMenu(Scanner sc) {
 		// Get and print a user's trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
@@ -96,10 +109,11 @@ public class ConsoleMenu {
 			System.out.format("%35s%10d%10d%15s", db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
 					t.getCurrentSeason(), db.getStatus(t.getStatusID()));
 		}
+		System.out.println();
+		System.out.println();
 		
 		while(true){
 			try {
-				System.out.println();
 				System.out.println("Enter an option:");
 				System.out.println("[1] Update a tracker");
 				System.out.println("[2] Add a tracker");
@@ -116,6 +130,7 @@ public class ConsoleMenu {
 					break;
 				case 3:
 					deleteMenu(sc);
+					
 					break;
 				case 4:
 					sessionID = -1;	// Resets current user
@@ -132,50 +147,52 @@ public class ConsoleMenu {
 		}
 	}
 	private void deleteMenu(Scanner sc) {
+		// Print the user's trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
-		System.out.println("==Progress Trackers==");
-		System.out.format("%5s%35s%10s%10s%15s","Index", "Show", "Episodes",
+		System.out.println("==Delete a Tracker==");
+		System.out.format("%15s%-35s%10s%10s%15s","Tracker Number ", "Show", "Episodes",
 				"Seasons", "Status");
 		for(int i=0; i<trackers.size();i++) {
 			Tracker t = trackers.get(i);
 			System.out.println();
-			System.out.format("%-5s%35s%10d%10d%15s", i+1, db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
+			System.out.format("%15s%-35s%10d%10d%15s", "[" + (int)(i+1) + "] ", db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
 					t.getCurrentSeason(), db.getStatus(t.getStatusID()));
 			
-		} System.out.println();
-		
+		} 
+		System.out.println();
+		System.out.format("%15s%-10s", "[0] ", "Go back");
+		System.out.println();
+		System.out.println();
+		// Prompt user for input
 		while(true){
 			try {
-				System.out.println("-------------------------------------");
-				System.out.println("Enter the tracker index to be deleted:");
-				System.out.println("[0] Go back");
+				System.out.println("Enter the [Tracker Number] to be deleted:");
 				
 				int userInput=sc.nextInt();
-				
 				if (userInput == 0) {
 					return;	// Go back to userMenu
-				} else if (userInput > 0 && userInput <= trackers.size()) {
+				} 
+				else if (userInput > 0 && userInput <= trackers.size()) {
 					// delete
 					db.deleteTracker(trackers.get(userInput-1));
-					
+					Show deletedShow =  db.getShowById(trackers.get(userInput-1).getShowID());
+					System.out.println("-------------------------------------------------------------------------------------");
+					System.out.println("Tracker for \"" + deletedShow.getTitle() + "\" deleted");
+					deleteMenu(sc);
+					return;	// Return to the previous menu, either a deleteMenu or the userMenu
 					// reprint trackers
-					trackers = db.getAllUserTrackers(sessionID);
-					System.out.println("==Progress Trackers==");
-					System.out.format("%5s%35s%10s%10s%15s","Index", "Show", "Episodes",
-							"Seasons", "Status");
-					for(int i=0; i<trackers.size();i++) {
-						Tracker t = trackers.get(i);
-						System.out.println();
-						System.out.format("%-5s%35s%10d%10d%15s", i+1, db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
-								t.getCurrentSeason(), db.getStatus(t.getStatusID()));
-						
-					} System.out.println();
-					
-					 //get and display show title
-					System.out.println("Tracker deleted");
-				} else {
-					//
-				}
+//					trackers = db.getAllUserTrackers(sessionID);
+//					System.out.println("==Progress Trackers==");
+//					System.out.format("%5s%35s%10s%10s%15s","Index", "Show", "Episodes",
+//							"Seasons", "Status");
+//					for(int i=0; i<trackers.size();i++) {
+//						Tracker t = trackers.get(i);
+//						System.out.println();
+//						System.out.format("%-5s%35s%10d%10d%15s", i+1, db.getShowById(t.getShowID()).getTitle(), t.getCurrentEpisode(),
+//								t.getCurrentSeason(), db.getStatus(t.getStatusID()));
+//						
+//					} System.out.println();
+				} 
 			}
 			catch (java.util.InputMismatchException e) {
 				System.out.println("Invalid option");
