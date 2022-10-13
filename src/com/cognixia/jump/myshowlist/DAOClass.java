@@ -337,6 +337,22 @@ public class DAOClass implements DAO {
 	@Override
 	public boolean updateTracker(Tracker trak) {
 		// TODO Auto-generated method stub
+		try {
+			PreparedStatement pstmt = conn.prepareStatement("UPDATE Trackers "
+					+ "SET currentEpisode = ?, currentSeason = ?, statusID = ? "
+					+ "WHERE userID = ? AND showID = ?");
+			pstmt.setInt(1, trak.getCurrentEpisode());
+			pstmt.setInt(2, trak.getCurrentSeason());
+			pstmt.setInt(3, trak.getStatusID());
+			pstmt.setInt(4, trak.getUserID());
+			pstmt.setInt(5, trak.getShowID());
+
+			if(pstmt.executeUpdate()>0)
+				return true;
+			
+		} catch (SQLException e) {
+			//e.printStackTrace();
+		}
 		return false;
 	}
 
@@ -354,5 +370,5 @@ public class DAOClass implements DAO {
 		}
 		return null;
 	}
-	
+
 }
