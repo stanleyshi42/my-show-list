@@ -3,8 +3,7 @@ package com.cognixia.jump.myshowlist;
 public class MainDriver {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+		ConsoleMenu menu = new ConsoleMenu();
+		menu.welcomeMenu();
 	}
-
 }

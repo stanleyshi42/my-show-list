@@ -2,71 +2,100 @@ create database if not exists myshowlist;
 use myshowlist;
 
 create table if not exists users(
-	user_id int not null auto_increment,
-	username char(15) not null,
+	userID int not null auto_increment,
+	username char(20) not null,
     password char(30) not null,
-    primary key(user_id),
+    primary key(userID),
     unique(username)
 );
 
 create table if not exists shows(
-	show_id int not null auto_increment,
+	showID int not null auto_increment,
 	title char(50) not null,
-    episode_count smallint not null,
-    season_count tinyint,
-    primary key(show_id),
+    episodeCount smallint not null,
+    seasonCount tinyint,
+    primary key(showID),
     unique(title)
 );
 
 create table if not exists statuses(
-	status_id int not null,
+	statusID int not null,
 	status varchar(13) not null,
-    primary key(status_id)
+    primary key(statusID)
 );
 
 create table if not exists trackers(
-	user_id int,
-    show_id int,
-    current_episode int,
-    current_season int,
-    status int,
-    primary key(user_id, show_id),
-    foreign key(user_id) references users(user_id),
-    foreign key(show_id) references shows(show_id)
+	userID int,
+    showID int,
+    currentEpisode int,
+    currentSeason int,
+    statusID int,
+    primary key(userID, showID),
+    foreign key(userID) references users(userID),
+    foreign key(showID) references shows(showID),
+    foreign key(statusID) references statuses(statusID)
 );
 
 insert into users(username, password)
-values('stan','password');
+values('stan','1234');
 insert into users(username, password)
-values('john','1234');
+values('john','password');
 select * from users;
 
-insert into statuses(status_id, status)
-values(0, 'Plan to Watch');
-insert into statuses(status_id, status)
-values(1, 'Watching');
-insert into statuses(status_id, status)
-values(2, 'Compelted');
-insert into statuses(status_id, status)
-values(3, 'On Hold');
-insert into statuses(status_id, status)
-values(4, 'Dropped');
+insert into statuses(statusID, status)
+values(0, 'Watching');
+insert into statuses(statusID, status)
+values(1, 'Completed');
+insert into statuses(statusID, status)
+values(2, 'On Hold');
+insert into statuses(statusID, status)
+values(3, 'Dropped');
+insert into statuses(statusID, status)
+values(4, 'Plan to Watch');
 select * from statuses;
 
-insert into shows(title, episode_count, season_count)
-values('Breaking Bad', 60, 6);
-insert into shows(title, episode_count, season_count)
-values('It\'s Always Sunny in Philadelphia', 160, 15);
-insert into shows(title, episode_count, season_count)
-values('Naruto', 300, 1);
-insert into shows(title, episode_count, season_count)
-values('The Office', 90, 9);
+insert into shows(title, episodeCount, seasonCount)
+values('Breaking Bad', 62, 5);
+insert into shows(title, episodeCount, seasonCount)
+values('It\'s Always Sunny in Philadelphia', 162, 15);
+insert into shows(title, episodeCount, seasonCount)
+values('Naruto', 220, 5);
+insert into shows(title, episodeCount, seasonCount)
+values('The Office', 201, 9);
+insert into shows(title, episodeCount, seasonCount)
+values('Nathan for You', 32, 4);
+insert into shows(title, episodeCount, seasonCount)
+values('The Rehearsal', 6, 1);
+insert into shows(title, episodeCount, seasonCount)
+values('The Simpsons', 731, 34);
+insert into shows(title, episodeCount, seasonCount)
+values('The Boys', 24, 3);
+insert into shows(title, episodeCount, seasonCount)
+values('Seinfeld', 180, 9);
+insert into shows(title, episodeCount, seasonCount)
+values('Diners, Drive-Ins and Dives', 419, 35);
+insert into shows(title, episodeCount, seasonCount)
+values('Hell\'s Kitchen', 316, 21);
+insert into shows(title, episodeCount, seasonCount)
+values('One Piece', 1025, 20);
 select * from shows;
 
-insert into trackers(user_id, show_id, current_episode, current_season, status)
-values(1, 1, 7, 1, 1);
-insert into trackers(user_id, show_id, current_episode, current_season, status)
-values(2, 1, 15, 2, 4);
-insert into trackers(user_id, show_id, current_episode, current_season, status)
-values(2, 2, 111, 1, 5);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(1, 1, 7, 1, 0);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(1, 7, 645, 30, 2);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(1, 10, 0, 0, 4);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(1, 11, 316, 21, 1);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(1, 3, 99, 0, 3);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(1, 12, 1025, 0, 0);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(1, 2, 0, 0, 4);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(2, 1, 15, 2, 0);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(2, 2, 111, 0, 0);
 select * from trackers;
