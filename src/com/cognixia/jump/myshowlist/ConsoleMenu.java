@@ -171,7 +171,7 @@ public class ConsoleMenu {
 						
 					} System.out.println();
 					
-					 //get and display show title
+					 //get and display show title TODO
 					System.out.println("Tracker deleted");
 				} else {
 					//

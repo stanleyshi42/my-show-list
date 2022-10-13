@@ -292,4 +292,27 @@ public class DAOClass implements DAO {
 		return null;
 	}
 
+	@Override
+	public boolean addUser(User user) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(
+				"INSERT INTO Users(username, password) " +
+				"VALUES(?, ?)"
+			);
+			pstmt.setString(1, user.getUsername());
+			pstmt.setString(1, user.getPassword());
+			
+			int i = pstmt.executeUpdate();
+			
+			if(i > 0) {
+				return true;
+			}
+			
+		} catch (SQLException e) {
+			//e.printStackTrace();
+		}
+
+		return false;
+	}
+
 }
