@@ -172,17 +172,17 @@ public class DAOClass implements DAO {
 	public List<Show> getAllShows() {
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Shows");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM shows");
 			
 			List<Show> showList = new ArrayList<Show>();
 			
 			//rs.first();
 			
 			while(rs.next()) {
-				int id = rs.getInt("show_id");
+				int id = rs.getInt("showID");
 				String title = rs.getString("title");
-				int episodes = rs.getInt("episode_count");
-				int seasons = rs.getInt("season_count");
+				int episodes = rs.getInt("episodeCount");
+				int seasons = rs.getInt("seasonCount");
 
 				Show show = new Show(id, title, episodes, seasons);
 				showList.add(show);
@@ -207,26 +207,26 @@ public class DAOClass implements DAO {
 	}
 
 	@Override
-	public Tracker getTrackerById(int user_id, int show_id) {
+	public Tracker getTrackerById(int userID, int showID) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	public List<Tracker> getAllUserTrackers(int user_id) {
+	public List<Tracker> getAllUserTrackers(int userID) {
 		try {
-			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Trackers WHERE user_id = ?");
-			pstmt.setInt(1, user_id);
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Trackers WHERE userID = ?");
+			pstmt.setInt(1, userID);
 			ResultSet rs = pstmt.executeQuery();
 			
 			List<Tracker> trackerList = new ArrayList<Tracker>();
 			
 			while(rs.next()) {
-				int show_id = rs.getInt("show_id");
-				int current_episode = rs.getInt("current_episode");
-				int current_season = rs.getInt("current_season");
-				int status = rs.getInt("status");
+				int showID = rs.getInt("showID");
+				int currentEpisode = rs.getInt("currentEpisode");
+				int currentSeason = rs.getInt("currentSeason");
+				int statusID = rs.getInt("statusID");
 
-				Tracker tracker = new Tracker(user_id, show_id, current_episode, current_season, status);
+				Tracker tracker = new Tracker(userID, showID, currentEpisode, currentSeason, statusID);
 				trackerList.add(tracker);
 			}
 			return trackerList;
@@ -246,14 +246,14 @@ public class DAOClass implements DAO {
 			ResultSet rs = pstmt.executeQuery();
 			rs.next();
 
-			int id = rs.getInt("user_id");
+			int id = rs.getInt("userID");
 			String name = rs.getString("username");
 			String password = rs.getString("password");
 
 			return new User(id, name, password);
 		} catch (SQLException e) {
 			System.out.println("\"" + username + "\" not found.");
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -278,7 +278,7 @@ public class DAOClass implements DAO {
 
 	public String getStatus(int id) {
 		try {
-			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Statuses WHERE status_id = ?");
+			PreparedStatement pstmt = conn.prepareStatement("SELECT * FROM Statuses WHERE statusID = ?");
 			pstmt.setInt(1, id);
 
 			ResultSet rs = pstmt.executeQuery();

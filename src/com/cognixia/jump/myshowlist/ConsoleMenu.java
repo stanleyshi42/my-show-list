@@ -5,14 +5,14 @@ import java.util.Scanner;
 
 public class ConsoleMenu {
 	private DAOClass db = new DAOClass();
-	private int sessionID;
+	private int sessionID = -1;	// Tracks which user is currently logged in
 	
 	public void welcomeMenu() {
 		Scanner sc = new Scanner(System.in);
 		
-		System.out.println("Welcome to myShowList!");
 		while(true){
 			try {
+				System.out.println("==Welcome to myShowList!==");
 				System.out.println("Enter an option:");
 				System.out.println("[1] Login");
 				System.out.println("[2] Register");
@@ -30,6 +30,8 @@ public class ConsoleMenu {
 					System.out.println("Exiting program");
 					System.exit(0);
 					break;
+				default:
+					throw new java.util.InputMismatchException();
 				}
 			} 
 			catch (java.util.InputMismatchException e) {
@@ -43,13 +45,14 @@ public class ConsoleMenu {
 	}
 	
 	private void loginMenu(Scanner sc) {
-		sc.nextLine();	
+		sc.nextLine();	// Clear scanner buffer
 		while(true){
 			try {
+				System.out.println("==Login==");
 				System.out.println("Enter your username, or hit [Enter] to go back:");
 				String username=sc.nextLine();
 				if(username.isEmpty()) {
-					return;
+					return;	// Go back to welcomeMenu
 				}
 				System.out.println("Enter your password:");
 				String password=sc.nextLine();
@@ -81,7 +84,6 @@ public class ConsoleMenu {
 	}
 	
 	private void userMenu(Scanner sc) {
-		// TODO print the user's progress trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.format("%33s%10s%10s%14s", "Show", "Episodes",
 				"Seasons", "Status");
@@ -102,6 +104,7 @@ public class ConsoleMenu {
 				System.out.println("[1] Update a tracker");
 				System.out.println("[2] Add a tracker");
 				System.out.println("[3] Delete a tracker");
+				System.out.println("[4] Logout");
 				
 				int userInput=sc.nextInt();
 				switch (userInput) {
@@ -114,6 +117,9 @@ public class ConsoleMenu {
 				case 3:
 					//TODO
 					break;
+				case 4:
+					sessionID = -1;	// Resets current user
+					return;	// Go back to loginMenu
 				}
 			}
 			catch(Exception e) {
