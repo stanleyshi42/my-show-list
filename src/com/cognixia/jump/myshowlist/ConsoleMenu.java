@@ -98,7 +98,8 @@ public class ConsoleMenu {
 				System.out.println("Enter your desired password:");
 				String password=sc.nextLine();
 				if(password.isEmpty()) {
-					return;	// Go back to welcomeMenu
+					System.out.println("Invalid password, hit [Enter] to re-enter username");
+					regMenu(sc);	// Go back to welcomeMenu
 				}
 				
 				boolean added = db.addUser(username, password);
