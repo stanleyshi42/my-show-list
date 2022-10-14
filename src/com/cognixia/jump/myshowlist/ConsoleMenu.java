@@ -2,7 +2,6 @@ package com.cognixia.jump.myshowlist;
 
 import java.util.List;
 import java.util.Scanner;
-
 import com.cognixia.jump.exceptions.LoginException;
 import com.cognixia.jump.exceptions.MenuOptionException;
 
@@ -187,6 +186,7 @@ public class ConsoleMenu {
 					break;
 				case 2:
 					//TODO
+					addMenu(sc);
 					break;
 				case 3:
 					deleteMenu(sc);
@@ -207,6 +207,82 @@ public class ConsoleMenu {
 			}
 		}
 	}
+	
+	
+	private void printAddMenuItems(List<Show> Shows) {
+		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
+		
+							
+		for(int i=0; i<Shows.size(); i++) {
+		Show s = Shows.get(i);
+			System.out.println();
+		System.out.format("%10s%35s%10s%10s%10s", "[" + (int)(i+1) + "] ",
+				db.getShowById(s.getId()).getTitle(), s.getId(), s.getSeasons(), s.getEpisodes());
+		}
+		System.out.println();
+	}
+	
+	private void addMenu(Scanner sc) {
+		// TODO Auto-generated method stub
+			List<Show> allshows = db.getAllShows(); 
+			List<Tracker> trackers = db.getAllUserTrackers(sessionID);
+			System.out.println("=====Add Menu for All Shows=====");
+			printAddMenuItems(allshows); 
+			System.out.println();
+			System.out.println();
+			// Prompt user for input
+			while(true) { 
+			try {	
+				System.out.println();
+				System.out.println("Enter a ShowID:");		
+				int userinput=sc.nextInt();	
+				if (userinput == 0) {
+					return;
+				} 
+				for (Tracker t : trackers) {
+								if (userinput == t.getShowID()) {
+									System.out.println("Already in the the trackers list");
+									addMenu(sc);
+									return;
+					}					
+				} 
+				if (userinput > 0 && userinput <= allshows.size()) {	
+					System.out.println("Enter what episode you are on: ");
+					int episodeInput=sc.nextInt();
+					
+					System.out.println("Enter what season you are on: ");
+					int seasonInput=sc.nextInt();
+					
+					System.out.println("==Status options==");
+					System.out.println("[1] Watching");
+					System.out.println("[2] Completed");
+					System.out.println("[3] On Hold");
+					System.out.println("[4] Dropped");	
+					System.out.println("[5] Plan to watch ");
+					int statusInput=sc.nextInt();
+					statusInput--;
+					
+					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput,
+							seasonInput, statusInput);
+					db.addTracker(newTracker);
+							return;
+				}	
+							
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+						
+			
+
+		
+		
+		
+			}
+	
+		
+	}
+	
 	private void deleteMenu(Scanner sc) {
 		// Print the user's trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);

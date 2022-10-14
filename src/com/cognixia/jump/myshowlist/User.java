@@ -4,7 +4,7 @@ public class User {
 	private int user_id;
 	private String username;
 	private String password;
-	
+
 	public User(int user_id, String username, String password) {
 		this.user_id = user_id;
 		this.username = username;
@@ -34,7 +34,7 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "User [user_id=" + user_id + ", username=" + username + ", password=" + password + "]";
