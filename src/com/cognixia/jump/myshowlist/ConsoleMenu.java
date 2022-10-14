@@ -2,8 +2,8 @@ package com.cognixia.jump.myshowlist;
 
 import java.util.List;
 import java.util.Scanner;
-
-
+import com.cognixia.jump.exceptions.LoginException;
+import com.cognixia.jump.exceptions.MenuOptionException;
 
 public class ConsoleMenu {
 	private DAOClass db = new DAOClass();
@@ -33,11 +33,11 @@ public class ConsoleMenu {
 					System.exit(0);
 					break;
 				default:
-					throw new java.util.InputMismatchException();
+					throw new MenuOptionException();
 				}
 			} 
-			catch (java.util.InputMismatchException e) {
-				System.out.println("Invalid option");
+			catch (MenuOptionException e) {
+				System.out.println(e.getMessage());
 				sc.nextLine();
 	        }
 			catch(Exception e) {
@@ -67,10 +67,14 @@ public class ConsoleMenu {
 					userMenu(sc);
 				}
 				else {
-					System.out.println("Invalid username/password");
+					throw new LoginException();
 				}
 			}
-			catch(Exception e) {
+			catch(LoginException e) {
+				System.out.println(e.getMessage());
+				sc.nextLine();
+			}
+			catch (Exception e) {
 				e.printStackTrace();
 				sc.nextLine();
 			}
@@ -95,13 +99,15 @@ public class ConsoleMenu {
 				System.out.println("Enter your desired username, or hit [Enter] to go back:");
 				String username=sc.nextLine();
 				if(username.isEmpty()) {
+					//throw new LoginException("username");
 					return;	// Go back to welcomeMenu
 				}
 				System.out.println("Enter your desired password:");
 				String password=sc.nextLine();
 				if(password.isEmpty()) {
-					System.out.println("Invalid password, hit [Enter] to re-enter username");
-					regMenu(sc);	// Go back to welcomeMenu
+					throw new LoginException("Password");
+					//System.out.println("Invalid password, hit [Enter] to re-enter username");
+					//regMenu(sc);	// Go back to welcomeMenu
 				}
 				
 				boolean added = db.addUser(username, password);
@@ -112,9 +118,14 @@ public class ConsoleMenu {
 					userMenu(sc);
 				}
 				else {
-					System.out.println("User is alreadly registered");
-					return;
+					throw new LoginException(1);
+					//System.out.println("User is already registered");
+					//return;
 				}
+			}
+			catch(LoginException e) {
+				System.out.println(e.getMessage());
+				//sc.nextLine();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
@@ -183,10 +194,12 @@ public class ConsoleMenu {
 				case 4:
 					sessionID = -1;	// Resets current user
 					return;	// Go back to loginMenu
+				default:
+					throw new MenuOptionException();
 				}
 			}
-			catch (java.util.InputMismatchException e) {
-				System.out.println("Invalid option");
+			catch (MenuOptionException e) {
+				System.out.println(e.getMessage());
 				sc.nextLine();
 	        } catch(Exception e) {
 				e.printStackTrace();
@@ -294,10 +307,12 @@ public class ConsoleMenu {
 					System.out.println("Tracker for \"" + deletedShow.getTitle() + "\" deleted");
 					deleteMenu(sc);
 					return;	// Return to the previous menu, either a deleteMenu or the userMenu
-				} 
+				} else {
+					throw new MenuOptionException();
+				}
 			}
-			catch (java.util.InputMismatchException e) {
-				System.out.println("Invalid option");
+			catch (MenuOptionException e) {
+				System.out.println(e.getMessage());
 				sc.nextLine();
 	        } 
 			catch(Exception e) {
