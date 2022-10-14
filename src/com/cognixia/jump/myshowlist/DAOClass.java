@@ -263,4 +263,27 @@ public class DAOClass {
 		}
 		return false;
 	}
+	
+	// Returns the number of users that:
+	// statusID = 0; are watching a show
+	// statusID = 1; have completed a show
+	// statusID = 2; have a show on hold
+	// statusID = 3; have dropped a show
+	// statusID = 4; plan to watch a show
+	public int getShowStatusCount(int showID, int statusID) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(
+					"SELECT COUNT(*) as count FROM trackers " +
+					"WHERE showID = ? AND statusID = ?"
+			);
+			pstmt.setInt(1, showID);
+			pstmt.setInt(2, statusID);
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			return rs.getInt("count");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }
