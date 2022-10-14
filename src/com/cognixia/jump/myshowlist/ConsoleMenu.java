@@ -94,15 +94,12 @@ public class ConsoleMenu {
 				System.out.println("Enter your desired username, or hit [Enter] to go back:");
 				String username=sc.nextLine();
 				if(username.isEmpty()) {
-					//throw new LoginException("username");
 					return;	// Go back to welcomeMenu
 				}
 				System.out.println("Enter your desired password:");
 				String password=sc.nextLine();
 				if(password.isEmpty()) {
 					throw new LoginException("Password");
-					//System.out.println("Invalid password, hit [Enter] to re-enter username");
-					//regMenu(sc);	// Go back to welcomeMenu
 				}
 				
 				boolean added = db.addUser(username, password);
@@ -114,13 +111,11 @@ public class ConsoleMenu {
 				}
 				else {
 					throw new LoginException(1);
-					//System.out.println("User is already registered");
-					//return;
 				}
 			}
 			catch(LoginException e) {
 				System.out.println(e.getMessage());
-				//sc.nextLine();
+				sc.nextLine();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
