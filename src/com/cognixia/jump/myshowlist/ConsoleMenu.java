@@ -127,11 +127,13 @@ public class ConsoleMenu {
 		System.out.format("%35s%10s%10s%15s",
 						  "Show", "Episodes", "Seasons", "Status");
 		for(Tracker t : trackers) {
+			Show show = db.getShowById(t.getShowID());
+			
 			System.out.println();
-			System.out.format("%35s%10d%10d%15s",
-					db.getShowById(t.getShowID()).getTitle(),
-					t.getCurrentEpisode(),
-					t.getCurrentSeason(),
+			System.out.format("%35s%10s%10s%15s",
+					show.getTitle(),
+					t.getCurrentEpisode() + "/" + show.getEpisodes(),
+					t.getCurrentSeason() + "/" + show.getSeasons(),
 					db.getStatus(t.getStatusID()));
 		}
 		System.out.println();
@@ -142,12 +144,14 @@ public class ConsoleMenu {
 						  "Tracker Number ", "Show", "Episodes", "Seasons", "Status");
 		for(int i=0; i<trackers.size();i++) {
 			Tracker t = trackers.get(i);
+			Show show = db.getShowById(t.getShowID());
+			
 			System.out.println();
-			System.out.format("%15s%-35s%10d%10d%15s",
+			System.out.format("%15s%-35s%10s%10s%15s",
 					"[" + (int)(i+1) + "] ",
-					db.getShowById(t.getShowID()).getTitle(),
-					t.getCurrentEpisode(),
-					t.getCurrentSeason(),
+					show.getTitle(),
+					t.getCurrentEpisode() + "/" + show.getEpisodes(),
+					t.getCurrentSeason() + "/" + show.getSeasons(),
 					db.getStatus(t.getStatusID()));
 		} 
 		System.out.println();
@@ -174,7 +178,6 @@ public class ConsoleMenu {
 					//TODO
 					break;
 				case 2:
-					//TODO
 					addMenu(sc);
 					break;
 				case 3:
@@ -198,7 +201,6 @@ public class ConsoleMenu {
 	
 	private void printAddMenuItems(List<Show> Shows) {
 		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
-		
 							
 		for(int i=0; i<Shows.size(); i++) {
 		Show s = Shows.get(i);
@@ -210,15 +212,13 @@ public class ConsoleMenu {
 	}
 	
 	private void addMenu(Scanner sc) {
-		// TODO Auto-generated method stub
-			List<Show> allshows = db.getAllShows(); 
-			List<Tracker> trackers = db.getAllUserTrackers(sessionID);
-			System.out.println("=====Add Menu for All Shows=====");
-			printAddMenuItems(allshows); 
-			System.out.println();
-			System.out.println();
-			// Prompt user for input
-			while(true) { 
+		List<Show> allshows = db.getAllShows(); 
+		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
+		System.out.println("=====Add Menu for All Shows=====");
+		printAddMenuItems(allshows); 
+
+		// Prompt user for input
+		while(true) { 
 			try {	
 				System.out.println();
 				System.out.println("Enter a ShowID:");		
@@ -227,10 +227,10 @@ public class ConsoleMenu {
 					return;
 				} 
 				for (Tracker t : trackers) {
-								if (userinput == t.getShowID()) {
-									System.out.println("Already in the the trackers list");
-									addMenu(sc);
-									return;
+					if (userinput == t.getShowID()) {
+						System.out.println("Already in the the trackers list");
+						addMenu(sc);
+						return;
 					}					
 				} 
 				if (userinput > 0 && userinput <= allshows.size()) {	
@@ -249,25 +249,15 @@ public class ConsoleMenu {
 					int statusInput=sc.nextInt();
 					statusInput--;
 					
-					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput,
-							seasonInput, statusInput);
+					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput, seasonInput, statusInput);
 					db.addTracker(newTracker);
-							return;
-				}	
-							
-				
-			} catch(Exception e) {
+					return;
+				}
+			}
+			catch(Exception e) {
 				e.printStackTrace();
-			}
-						
-			
-
-		
-		
-		
-			}
-	
-		
+			}	
+		}
 	}
 	
 	private void deleteMenu(Scanner sc) {
