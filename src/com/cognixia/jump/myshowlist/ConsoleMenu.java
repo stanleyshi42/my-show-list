@@ -140,7 +140,7 @@ public class ConsoleMenu {
 				int userInput=sc.nextInt();
 				switch (userInput) {
 				case 1:
-					//TODO
+					updateMenu(sc);
 					break;
 				case 2:
 					addMenu(sc);
@@ -273,63 +273,46 @@ public class ConsoleMenu {
 			System.out.println();
 			System.out.println();
 			// Prompt user for input
-			while(true) { 
-			try {	
-				System.out.println();
-				System.out.println("Enter a ShowID:");		
-				int userinput=sc.nextInt();	
-				if (userinput == 0) {
-					return;
-				} 
-				for (Tracker t : trackers) {
-					if (userinput == t.getShowID()) {
-						System.out.println("Already updated in the list");
+			while(true){
+				try {
+					System.out.println("Enter the [Tracker Number] to be updated:");
+					
+					int userInput=sc.nextInt();
+
+					if (userInput == 0) {
+						return;	// Go back to userMenu
+					} 
+					else if (userInput > 0 && userInput <= trackers.size()) {
+						System.out.println("==Update options==" + " [0] " + " to Go back");
+						System.out.println("[1] Episodes");
+						System.out.println("[2] Seasons");
+						System.out.println("[3] Status");
+						
+						db.updateTracker(trackers.get(userInput-1));
+						Show updatedShow =  db.getShowById(trackers.get(userInput-1).getShowID());
+						System.out.println("-------------------------------------------------------------------------------------");
+						System.out.println("Tracker for \"" + updatedShow.getTitle() + "\" updated");
 						updateMenu(sc);
-						return;
-					}					
-				} 
-				if (userinput > 0 && userinput <= trackers.size()) {	
-					System.out.println("What show are you on now?: ");
-					int showInput=sc.nextInt();
-					
-					System.out.println(" What season you are on: ");
-					int seasonInput=sc.nextInt();
-					
-					System.out.println("What episode are you on?: ");
-					int episodeInput=sc.nextInt();
-					
-					System.out.println("==Status options==");
-					System.out.println("[1] Not Completed ");
-					System.out.println("[2] In Progress");
-					System.out.println("[3] Completed");
-					int statusInput=sc.nextInt();
-					
-					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput,
-							seasonInput, statusInput);
-					db.addTracker(newTracker);
-							return;
-				} else {
-					throw new MenuOptionException();
+						return;	// Return to the previous menu, either a deleteMenu or the userMenu
+					} else {
+						throw new MenuOptionException();
+					}
 				}
-							
-				
-			} catch (InputMismatchException e) {
-				System.out.println("Input was not a valid integer");
-				sc.nextLine();
-			}
-			catch (MenuOptionException e) {
-				System.out.println(e.getMessage());
-				sc.nextLine();
-	        } 
-			catch(Exception e) {
-				e.printStackTrace();
-				sc.nextLine();	// Clear scanner buffer
+				catch (InputMismatchException e) {
+					System.out.println("Input was not a valid integer");
+					sc.nextLine();
+				}
+				catch (MenuOptionException e) {
+					System.out.println(e.getMessage());
+					sc.nextLine();
+		        } 
+				catch(Exception e) {
+					e.printStackTrace();
+					sc.nextLine();	// Clear scanner buffer
+				}
 			}
 		
 		}
-	
-		
-	}
 	
 	private void deleteMenu(Scanner sc) {
 		// Print the user's trackers
