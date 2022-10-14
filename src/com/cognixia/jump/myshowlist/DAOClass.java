@@ -28,7 +28,7 @@ public class DAOClass {
 			}
 			return showList;
 		} catch (SQLException e) {
-			System.out.println("Could not retrieve list of shows from database");
+			//e.printStackTrace();
 		}
 		return null;
 	}
@@ -50,9 +50,8 @@ public class DAOClass {
 				trackerList.add(trak);
 			}
 			return trackerList;
-			
 		} catch (SQLException e) {
-			System.out.println("Could not retrieve list of trackers from database");
+			//e.printStackTrace();
 		}
 		return null;
 	}
@@ -73,7 +72,6 @@ public class DAOClass {
 
 			return new Show(showID, title, episodes, seasons);
 		} catch (SQLException e) {
-			System.out.println("\"" + showID + "\" not found.");
 			//e.printStackTrace();
 		}
 		return null;
@@ -97,8 +95,6 @@ public class DAOClass {
 
 			return new Tracker(userID, showID, episode, season, status);
 		} catch (SQLException e) {
-			System.out.println("Tracker for userID - " + "\"" + userID + "\"" + "showID - " 
-								+ "\"" + showID + "\" not found.");
 			//e.printStackTrace();
 		}
 		return null;
@@ -127,7 +123,6 @@ public class DAOClass {
 			}
 			return trackerList;
 		} catch (SQLException e) {
-			System.out.println("Could not retrieve user's trackers from database");
 			//e.printStackTrace();
 		}
 		return null;
@@ -150,7 +145,6 @@ public class DAOClass {
 
 			return new User(id, name, password);
 		} catch (SQLException e) {
-			System.out.println("\"" + username + "\" not found.");
 			//e.printStackTrace();
 		}
 		return null;
@@ -169,14 +163,11 @@ public class DAOClass {
 			pstmt.setInt(5, trak.getStatusID());
 			
 			int i = pstmt.executeUpdate();
-			if(i > 0) {
+			if(i > 0)
 				return true;
-			}
-			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-		
 		return false;
 	}
 	
@@ -190,11 +181,10 @@ public class DAOClass {
 			pstmt.setInt(2, trak.getShowID());
 			
 			int i = pstmt.executeUpdate();
-			if(i > 0) {
+			if(i > 0)
 				return true;
-			}
 		} catch (SQLException e) {
-			System.out.println("Tracker not found.");
+			//e.printStackTrace();
 		}
 		return false;
 	}
@@ -209,12 +199,10 @@ public class DAOClass {
 			pstmt.setInt(2, showID);
 			
 			int i = pstmt.executeUpdate();
-			if(i > 0) {
+			if(i > 0)
 				return true;
-			}
 		} catch (SQLException e) {
-			System.out.println("Tracker for userID - " + "\"" + userID + "\"" + "showID - " 
-					+ "\"" + showID + "\" not found.");
+			//e.printStackTrace();
 		}
 		return false;
 	}
@@ -234,7 +222,6 @@ public class DAOClass {
 
 			if(pstmt.executeUpdate()>0)
 				return true;
-			
 		} catch (SQLException e) {
 			//e.printStackTrace();
 		}
@@ -269,15 +256,11 @@ public class DAOClass {
 			pstmt.setString(2, password);
 			
 			int i = pstmt.executeUpdate();
-			
-			if(i > 0) {
+			if(i > 0)
 				return true;
-			}
-			
 		} catch (SQLException e) {
 			//e.printStackTrace();
 		}
-
 		return false;
 	}
 }
