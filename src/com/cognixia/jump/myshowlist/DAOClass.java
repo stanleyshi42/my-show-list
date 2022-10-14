@@ -8,12 +8,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DAOClass implements DAO {
+public class DAOClass {
 	private Connection conn = ConnManagerWithProperties.getConnection();
-		
-	// TODO might want to separate DAO into multiple DAOs, one for each table
 
-	@Override
 	public List<Show> getAllShows() {
 		try {
 			Statement stmt = conn.createStatement();
@@ -35,8 +32,7 @@ public class DAOClass implements DAO {
 		}
 		return null;
 	}
-
-	@Override
+	
 	public List<Tracker> getAllTrackers() {
 		try {
 			Statement stmt = conn.createStatement();
@@ -60,8 +56,7 @@ public class DAOClass implements DAO {
 		}
 		return null;
 	}
-
-	@Override
+	
 	public Show getShowById(int showID) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
@@ -83,8 +78,7 @@ public class DAOClass implements DAO {
 		}
 		return null;
 	}
-
-	@Override
+	
 	public Tracker getTrackerById(int userID, int showID) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
@@ -133,13 +127,12 @@ public class DAOClass implements DAO {
 			}
 			return trackerList;
 		} catch (SQLException e) {
-			System.out.println("Could not retrieve list of user's trackers from database");
+			System.out.println("Could not retrieve user's trackers from database");
 			//e.printStackTrace();
 		}
 		return null;
 	}
-
-	@Override
+	
 	public User getUserByUsername(String username) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
@@ -162,8 +155,7 @@ public class DAOClass implements DAO {
 		}
 		return null;
 	}
-
-	@Override
+	
 	public boolean addTracker(Tracker trak) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
@@ -187,8 +179,7 @@ public class DAOClass implements DAO {
 		
 		return false;
 	}
-
-	@Override
+	
 	public boolean deleteTracker(Tracker trak) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
@@ -208,7 +199,6 @@ public class DAOClass implements DAO {
 		return false;
 	}
 	
-	@Override
 	public boolean deleteTrackerByID(int userID, int showID) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
@@ -229,7 +219,6 @@ public class DAOClass implements DAO {
 		return false;
 	}
 
-	@Override
 	public boolean updateTracker(Tracker trak) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
@@ -269,8 +258,7 @@ public class DAOClass implements DAO {
 		}
 		return null;
 	}
-
-	@Override
+	
 	public boolean addUser(String username, String password) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
