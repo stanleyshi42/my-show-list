@@ -81,6 +81,7 @@ public class ConsoleMenu {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
+				sc.nextLine();
 			}
 		}
 	}
@@ -177,17 +178,14 @@ public class ConsoleMenu {
 		System.out.println("\n");
 		
 		// Prompt user for input
-		while(true) { 
+		while(true) {
 			try {
 				// Prompt user for show to track
+				boolean validInput = false;
 				int showInput;
 				do {
 					System.out.println("Enter a [ShowID] to track:");	
 					showInput = sc.nextInt();
-					if(showInput < 0 || showInput > shows.size())
-						System.out.println("Invalid ShowID");
-					else if(showInput == 0)
-						return;
 					// Check if show is already being tracked
 					for (Tracker t: trackers) {
 						if (showInput == t.getShowID()) {
@@ -195,12 +193,19 @@ public class ConsoleMenu {
 							showInput = -1;
 						}
 					}
-				} while(showInput < 0 || showInput > shows.size());
+					if(showInput < 0 || showInput > shows.size())
+						System.out.println("Invalid ShowID");
+					else if(showInput == 0)
+						return;
+					else
+						validInput = true;
+				} while(!validInput);
 				
 				// Get the selected show
 				Show show = db.getShowById(showInput);
 
 				// Prompt user for episodes watched
+				validInput = false;
 				int episodeInput;
 				do {
 					System.out.println("Enter episodes watched: ");
@@ -209,12 +214,15 @@ public class ConsoleMenu {
 					// Check for negative input
 					if(episodeInput < 0)
 						System.out.println("Invalid episode input");
+					else
+						validInput=true;
 					// If episode input is greater than episode count, set it to the latest episode
-					else if (episodeInput > show.getEpisodes())				
+					if (episodeInput > show.getEpisodes())				
 						episodeInput = show.getEpisodes();
-				} while(episodeInput < 0);
+				} while(!validInput);
 
 				// Prompt user for episodes watched
+				validInput = false;
 				int seasonInput;
 				do {
 					System.out.println("Enter seasons watched: ");
@@ -222,13 +230,17 @@ public class ConsoleMenu {
 					
 					// Check for negative input
 					if(seasonInput < 0)
-						System.out.println("Invalid seasons input");
+						System.out.println("Invalid season input");
+					else
+						validInput = true;
 					// If season input is greater than season count, set it to the latest season
-					else if (seasonInput > show.getSeasons())				
+					if (seasonInput > show.getSeasons()) {			
 						seasonInput = show.getSeasons();
-				} while(seasonInput < 0);
+					}	
+				} while(!validInput);
 				
 				// Prompt user for show status
+				validInput = false;
 				int statusInput;
 				do {
 					System.out.println("==Show Status Options==");
@@ -241,7 +253,9 @@ public class ConsoleMenu {
 					statusInput=sc.nextInt();
 					if(statusInput < 1 || statusInput > 5)
 						System.out.println("Invalid option");
-				} while(statusInput < 1 || statusInput > 5);
+					else
+						validInput = true;
+				} while(!validInput);
 				
 				Tracker newTracker = new Tracker(sessionID, showInput, episodeInput, seasonInput, --statusInput);
 				if (db.addTracker(newTracker)) {
@@ -255,6 +269,7 @@ public class ConsoleMenu {
 			}
 			catch(Exception e) {
 				e.printStackTrace();
+				sc.nextLine();
 			}
 		}
 	}
@@ -339,6 +354,7 @@ public class ConsoleMenu {
 			}
 			catch(Exception e) {
 				e.printStackTrace();
+				sc.nextLine();
 			}
 		}
 	}
