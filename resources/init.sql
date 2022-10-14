@@ -36,12 +36,6 @@ create table if not exists trackers(
     foreign key(statusID) references statuses(statusID)
 );
 
-insert into users(username, password)
-values('stan','1234');
-insert into users(username, password)
-values('john','password');
-select * from users;
-
 insert into statuses(statusID, status)
 values(0, 'Watching');
 insert into statuses(statusID, status)
@@ -52,7 +46,6 @@ insert into statuses(statusID, status)
 values(3, 'Dropped');
 insert into statuses(statusID, status)
 values(4, 'Plan to Watch');
-select * from statuses;
 
 insert into shows(title, episodeCount, seasonCount)
 values('Breaking Bad', 62, 5);
@@ -78,7 +71,17 @@ insert into shows(title, episodeCount, seasonCount)
 values('Hell\'s Kitchen', 316, 21);
 insert into shows(title, episodeCount, seasonCount)
 values('One Piece', 1025, 20);
-select * from shows;
+
+insert into users(username, password)
+values('stan','1234');
+insert into users(username, password)
+values('john','password');
+insert into users(username, password)
+values('bob','1');
+insert into users(username, password)
+values('qwerty','1');
+insert into users(username, password)
+values('wasd','1');
 
 insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
 values(1, 1, 7, 1, 0);
@@ -98,4 +101,16 @@ insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
 values(2, 1, 15, 2, 0);
 insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
 values(2, 2, 111, 0, 0);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(2, 5, 5, 1, 0);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(3, 12, 123, 1, 0);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(4, 12, 274, 1, 0);
+insert into trackers(userID, showID, currentEpisode, currentSeason, statusID)
+values(5, 12, 900, 5, 0);
+
+select * from statuses;
+select * from users;
+select * from shows;
 select * from trackers;
