@@ -210,14 +210,14 @@ public class ConsoleMenu {
 	
 	
 	private void printAddMenuItems(List<Show> Shows) {
-		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
+		System.out.format("%10s%35s%10s%10s%15s",  "ShowID", "Show", "Seasons", "Episodes");
 		
 							
 		for(int i=0; i<Shows.size(); i++) {
 		Show s = Shows.get(i);
 			System.out.println();
-		System.out.format("%10s%35s%10s%10s%10s", "[" + (int)(i+1) + "] ",
-				db.getShowById(s.getId()).getTitle(), s.getId(), s.getSeasons(), s.getEpisodes());
+		System.out.format("%10s%35s%10s%10s", "[" + (int)(i+1) + "] ",
+				db.getShowById(s.getId()).getTitle(), s.getSeasons(), s.getEpisodes());
 		}
 		System.out.println();
 	}
@@ -234,7 +234,7 @@ public class ConsoleMenu {
 			while(true) { 
 			try {	
 				System.out.println();
-				System.out.println("Enter a ShowID:");		
+				System.out.println("Enter a ShowID:" +  " [0] " + " to Go back");		
 				int userinput=sc.nextInt();	
 				if (userinput == 0) {
 					return;
@@ -247,11 +247,35 @@ public class ConsoleMenu {
 					}					
 				} 
 				if (userinput > 0 && userinput <= allshows.size()) {	
-					System.out.println("Enter what episode you are on: ");
-					int episodeInput=sc.nextInt();
+
+				
+						System.out.println("Enter what episode you are on: " +  " [0] " + " to Go back");
+					int episodeInput=sc.nextInt();	
+					while (episodeInput > db.getShowById(userinput).getEpisodes()); {					
+						System.out.println("\n");
+						System.out.println("The actual max episode is " + db.getShowById(userinput).getEpisodes());
+						System.out.println("Please enter new episode option: " + " [0] " + " to Go back");
+						episodeInput=sc.nextInt();						
+					} 
+					if (episodeInput == 0); {
+						addMenu(sc);
+					}
+ 
 					
 					System.out.println("Enter what season you are on: ");
 					int seasonInput=sc.nextInt();
+					while(true) {
+					if	(seasonInput >= db.getShowById(userinput).getSeasons()) {							 
+						System.out.println("\n");
+						System.out.println("The actual max season is " + db.getShowById(userinput).getSeasons());
+						System.out.println("Please enter new season option: " + " [0] " + " to Go back");
+						seasonInput=sc.nextInt();						
+						}
+						
+					if (seasonInput == 0); {
+						addMenu(sc);
+						}
+					}
 					
 					System.out.println("==Status options==");
 					System.out.println("[1] Watching");
@@ -260,7 +284,17 @@ public class ConsoleMenu {
 					System.out.println("[4] Dropped");	
 					System.out.println("[5] Plan to watch ");
 					int statusInput=sc.nextInt();
-					statusInput--;
+					statusInput--;					
+						if (statusInput > 5) {
+							System.out.println("\n");
+							System.out.println("This is not a valid option");
+							addMenu(sc);
+							return;
+						}	else if (statusInput == 0) {
+							addMenu(sc);
+							return;
+						}
+					
 					
 					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput,
 							seasonInput, statusInput);
@@ -273,11 +307,7 @@ public class ConsoleMenu {
 				e.printStackTrace();
 			}
 						
-			
-
-		
-		
-		
+	
 			}
 	
 		
