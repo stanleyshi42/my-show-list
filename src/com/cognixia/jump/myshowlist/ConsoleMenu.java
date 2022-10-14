@@ -411,24 +411,23 @@ public class ConsoleMenu {
 	}
 	
 	private void statsMenu(Scanner sc) {
-		while(true){
-			try {
-				List<Show> shows = db.getAllShows();
-				System.out.println("==Show Stats==");
-				Helper.printShowStats(shows, db);
-				System.out.println();
-				System.out.println("Press [Enter] to go back");
-				sc.nextLine();
-				sc.nextLine();
-				return;
-				
-			} catch (InputMismatchException e) {
-				System.out.println("Invalid menu option");
-				sc.nextLine();
-			}  catch(Exception e) {
-				e.printStackTrace();
-				sc.nextLine();	// Clear scanner buffer
-			}
+		try {
+			List<Show> shows = db.getAllShows();
+			System.out.println("==Show Stats==");
+			Helper.printShowStats(shows, db);
+			System.out.println();
+			System.out.println("Press [Enter] to go back");
+			sc.nextLine();
+			sc.nextLine();
+			return;
+			
+		} catch (InputMismatchException e) {
+			System.out.println("Invalid menu option");
+			sc.nextLine();
+		}  catch(Exception e) {
+			e.printStackTrace();
+			sc.nextLine();	// Clear scanner buffer
 		}
+		
 	}
 }

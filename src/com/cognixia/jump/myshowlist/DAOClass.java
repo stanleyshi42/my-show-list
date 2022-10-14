@@ -14,7 +14,7 @@ public class DAOClass {
 	public List<Show> getAllShows() {
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM shows");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM shows ORDER BY title");
 			List<Show> showList = new ArrayList<Show>();
 			
 			while(rs.next()) {
