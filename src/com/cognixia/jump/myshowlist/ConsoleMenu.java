@@ -103,7 +103,8 @@ public class ConsoleMenu {
 
 				// If registration was successful, log the user in
 				if(db.addUser(username, password)) {
-					Helper.login(username, password, db);
+					User user = Helper.login(username, password, db);
+					sessionID = user.getUser_id();
 					System.out.println("Succesfully registered!");
 					userMenu(sc);
 					return;
