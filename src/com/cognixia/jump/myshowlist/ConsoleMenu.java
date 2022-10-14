@@ -255,11 +255,11 @@ public class ConsoleMenu {
 				if (userinput > 0 && userinput <= shows.size()) {
 					System.out.println("Enter what episode you are on: " +  " [0] " + " to Go back");
 					int episodeInput=sc.nextInt();	
-					while (episodeInput > db.getShowById(userinput).getEpisodes()); {					
+					while (episodeInput > db.getShowById(userinput).getEpisodes()) {					
 						System.out.println("\n");
 						System.out.println("The actual max episode is " + db.getShowById(userinput).getEpisodes());
 						System.out.println("Please enter new episode option: " + " [0] " + " to Go back");
-						episodeInput=sc.nextInt();						
+						episodeInput=sc.nextInt();
 					} 
 					if (episodeInput == 0); {
 						addMenu(sc);
@@ -267,8 +267,7 @@ public class ConsoleMenu {
 					
 					System.out.println("Enter what season you are on: ");
 					int seasonInput=sc.nextInt();
-					while(true) {
-					if	(seasonInput >= db.getShowById(userinput).getSeasons()) {							 
+					while(seasonInput >= db.getShowById(userinput).getSeasons()) {							 
 						System.out.println("\n");
 						System.out.println("The actual max season is " + db.getShowById(userinput).getSeasons());
 						System.out.println("Please enter new season option: " + " [0] " + " to Go back");
@@ -277,8 +276,8 @@ public class ConsoleMenu {
 						
 					if (seasonInput == 0); {
 						addMenu(sc);
-						}
 					}
+					
 					
 					System.out.println("==Status options==");
 					System.out.println("[1] Watching");
