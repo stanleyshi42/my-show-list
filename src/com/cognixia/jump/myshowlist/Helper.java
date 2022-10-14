@@ -30,6 +30,7 @@ public class Helper {
 						t.getCurrentEpisode() + "/" + show.getEpisodes(),
 						t.getCurrentSeason() + "/" + show.getSeasons(),
 						db.getStatus(t.getStatusID()));
+				System.out.println();
 			}
 		}
 		System.out.println();
