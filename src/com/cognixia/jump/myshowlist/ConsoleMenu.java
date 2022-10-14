@@ -240,9 +240,10 @@ public class ConsoleMenu {
 				System.out.println();
 				System.out.println("Enter a ShowID:" +  " [0] " + " to Go back");		
 				int userinput=sc.nextInt();	
-				if (userinput == 0) {
+				if (userinput == 0)
 					return;
-				} 
+				
+				// Check if show is already being tracked
 				for (Tracker t : trackers) {
 					if (userinput == t.getShowID()) {
 						System.out.println("Already in the the trackers list");
@@ -251,11 +252,8 @@ public class ConsoleMenu {
 					}					
 				} 
 
-
-				if (userinput > 0 && userinput <= shows.size()) {	
-
-				
-						System.out.println("Enter what episode you are on: " +  " [0] " + " to Go back");
+				if (userinput > 0 && userinput <= shows.size()) {
+					System.out.println("Enter what episode you are on: " +  " [0] " + " to Go back");
 					int episodeInput=sc.nextInt();	
 					while (episodeInput > db.getShowById(userinput).getEpisodes()); {					
 						System.out.println("\n");
@@ -266,7 +264,6 @@ public class ConsoleMenu {
 					if (episodeInput == 0); {
 						addMenu(sc);
 					}
-
 					
 					System.out.println("Enter what season you are on: ");
 					int seasonInput=sc.nextInt();
@@ -311,11 +308,7 @@ public class ConsoleMenu {
 				e.printStackTrace();
 
 			}
-						
-	
-			}
-	
-
+		}
 	}
 	
 	private void deleteMenu(Scanner sc) {
