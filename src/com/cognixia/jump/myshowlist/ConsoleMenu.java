@@ -176,8 +176,8 @@ public class ConsoleMenu {
 		// Prompt user for input
 		while(true) { 
 			try {	
-				System.out.println("      [0]" + " Go back");
-				System.out.println("Enter a [Show ID] to track:");		
+				System.out.println();
+				System.out.println("Enter a ShowID:" +  " [0] " + " to Go back");		
 				int userinput=sc.nextInt();	
 				if (userinput == 0)
 					return;
@@ -185,40 +185,31 @@ public class ConsoleMenu {
 				// Check if show is already being tracked
 				for (Tracker t : trackers) {
 					if (userinput == t.getShowID()) {
-						System.out.println("Already tracking " + db.getShowById(t.getShowID()).getTitle());
+						System.out.println("Already in the the trackers list");
 						addMenu(sc);
 						return;
-					}
-				}
+					}					
+				} 
 
 				if (userinput > 0 && userinput <= shows.size()) {
-					System.out.println("Enter what episode you are on: " +  " [0] " + " to Go back");
+					System.out.println("Enter what episode you are on: ");
 					int episodeInput=sc.nextInt();	
-					while (episodeInput > db.getShowById(userinput).getEpisodes()) {					
+				if (episodeInput > db.getShowById(userinput).getEpisodes()) {					
 						System.out.println("\n");
 						System.out.println("The actual max episode is " + db.getShowById(userinput).getEpisodes());
-						System.out.println("Please enter new episode option: " + " [0] " + " to Go back");
-						episodeInput=sc.nextInt();
-					}
-					if (episodeInput == 0); {
-						addMenu(sc);
-					}
-					
+						episodeInput=db.getShowById(userinput).getEpisodes();
+					 
+					}					
 					System.out.println("Enter what season you are on: ");
 					int seasonInput=sc.nextInt();
-					while(seasonInput >= db.getShowById(userinput).getSeasons()) {							 
+					if (seasonInput >= db.getShowById(userinput).getSeasons()) {							 
 						System.out.println("\n");
 						System.out.println("The actual max season is " + db.getShowById(userinput).getSeasons());
-						System.out.println("Please enter new season option: " + " [0] " + " to Go back");
-						seasonInput=sc.nextInt();						
+						seasonInput=db.getShowById(userinput).getSeasons();				
 						}
-						
-					if (seasonInput == 0); {
-						addMenu(sc);
-					}
+										
 					
-					
-					System.out.println("==Status options==");
+					System.out.println("==Status options==" + " [0] " + " to Go back");
 					System.out.println("[1] Watching");
 					System.out.println("[2] Completed");
 					System.out.println("[3] On Hold");
@@ -226,37 +217,40 @@ public class ConsoleMenu {
 					System.out.println("[5] Plan to watch ");
 					int statusInput=sc.nextInt();
 					statusInput--;					
-						if (statusInput > 5) {
-							System.out.println("\n");
-							System.out.println("This is not a valid option");
-							addMenu(sc);
-							return;
-						}	else if (statusInput == 0) {
-							addMenu(sc);
-							return;
+					if (statusInput > 5) {
+						do {	System.out.println("\n");
+								System.out.println("This is not a valid option");
+								System.out.println("==Status options==" + " [0] " + " to Go back");
+								System.out.println("[1] Watching");
+								System.out.println("[2] Completed");
+								System.out.println("[3] On Hold");
+								System.out.println("[4] Dropped");	
+								System.out.println("[5] Plan to watch ");	
+								sc.nextInt();
+								
+						} while(statusInput > 5);
+						
+						}	
+					else if (statusInput == 0 || episodeInput == 0 || seasonInput == 0) {
+							userMenu(sc);
+						
 						}
+					
 					
 					
 					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput, seasonInput, statusInput);
 					db.addTracker(newTracker);
-					return;
-				} else {
-					throw new MenuOptionException();
+					userMenu(sc);
+					
 				}
 			}
-			catch (InputMismatchException e) {
-				System.out.println("Input was not a valid integer");
-				sc.nextLine();
-			}
-			catch (MenuOptionException e) {
-				System.out.println(e.getMessage());
-				sc.nextLine();
-	        } 
 			catch(Exception e) {
 				e.printStackTrace();
-				sc.nextLine();	// Clear scanner buffer
+
 			}
+		System.out.println("Show is successfully added");
 		}
+		
 	}
 	
 	
