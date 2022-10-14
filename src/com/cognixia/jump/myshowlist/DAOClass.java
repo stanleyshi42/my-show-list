@@ -263,4 +263,21 @@ public class DAOClass {
 		}
 		return false;
 	}
+	
+	// Returns the number of users that completed a show
+	public int getShowCompletedCount(int showID) {
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(
+					"SELECT COUNT(*) as count FROM trackers " +
+					"WHERE showID = ? AND statusID = 1"
+			);
+			pstmt.setInt(1, showID);
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			return rs.getInt("count");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return -1;
+	}
 }
