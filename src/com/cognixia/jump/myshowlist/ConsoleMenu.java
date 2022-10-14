@@ -311,6 +311,82 @@ public class ConsoleMenu {
 		}
 	}
 	
+	
+	private void printUpdateMenuItems(List<Show> Shows) {
+		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
+		
+							
+		for(int i=0; i<Shows.size(); i++) {
+		Show s = Shows.get(i);
+			System.out.println();
+		System.out.format("%10s%35s%10s%10s%10s", "[" + (int)(i+1) + "] ",
+				db.getShowById(s.getId()).getTitle(), s.getId(), s.getSeasons(), s.getEpisodes());
+		}
+		System.out.println();
+	}
+	// Update Menu
+	private void updateMenu(Scanner sc) {
+		// TODO Auto-generated method stub
+			List<Show> allshows = db.getAllShows(); 
+			List<Tracker> trackers = db.getAllUserTrackers(sessionID);
+			System.out.println("=====Update Menu for All Shows=====");
+			printUpdateMenuItems(allshows); 
+			System.out.println();
+			System.out.println();
+			// Prompt user for input
+			while(true) { 
+			try {	
+				System.out.println();
+				System.out.println("Enter a ShowID:");		
+				int userinput=sc.nextInt();	
+				if (userinput == 0) {
+					return;
+				} 
+				for (Tracker t : trackers) {
+								if (userinput == t.getShowID()) {
+									System.out.println("Already updated in the list");
+									updateMenu(sc);
+									return;
+					}					
+				} 
+				if (userinput > 0 && userinput <= allshows.size()) {	
+					System.out.println("What show are you on now?: ");
+					int showInput=sc.nextInt();
+					
+					System.out.println(" What season you are on: ");
+					int seasonInput=sc.nextInt();
+					
+					System.out.println("What episode are you on?: ");
+					int episodeInput=sc.nextInt();
+					
+					System.out.println("==Status options==");
+					System.out.println("[1] Not Completed ");
+					System.out.println("[2] In Progress");
+					System.out.println("[3] Completed");
+					int statusInput=sc.nextInt();
+					statusInput--;
+					
+					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput,
+							seasonInput, statusInput);
+					db.addTracker(newTracker);
+							return;
+				}	
+							
+				
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+						
+			
+
+		
+		
+		
+			}
+	
+		
+	}
+	
 	private void deleteMenu(Scanner sc) {
 		// Print the user's trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
