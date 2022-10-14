@@ -172,7 +172,9 @@ public class ConsoleMenu {
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("=====Add a Tracker=====");
 		Helper.printShowsWithIndex(shows);
-		System.out.println("      [0] " + "Go back");
+		System.out.format("%10s%-35s",
+						  "[0] ", "Go back");
+		System.out.println("\n");
 		
 		// Prompt user for input
 		while(true) { 
@@ -184,6 +186,8 @@ public class ConsoleMenu {
 					showInput = sc.nextInt();
 					if(showInput < 0 || showInput > shows.size())
 						System.out.println("Invalid ShowID");
+					else if(showInput == 0)
+						return;
 					// Check if show is already being tracked
 					for (Tracker t: trackers) {
 						if (showInput == t.getShowID()) {
@@ -240,8 +244,10 @@ public class ConsoleMenu {
 				} while(statusInput < 1 || statusInput > 5);
 				
 				Tracker newTracker = new Tracker(sessionID, showInput, episodeInput, seasonInput, --statusInput);
-				if (db.addTracker(newTracker)) 
+				if (db.addTracker(newTracker)) {
+					System.out.println("-------------------------------------------------------------------------------------");
 					System.out.println("Now tracking " + show.getTitle());
+				}
 				else
 					System.out.println("Failed to add tracker");
 				
@@ -258,7 +264,9 @@ public class ConsoleMenu {
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("=====Update a Tracker=====");
 		Helper.printTrackersWithIndex(trackers, db);
-		System.out.println("      [0] " + "Go back");
+		System.out.format("%15s%-35s",
+				  		  "[0] ", "Go back");
+		System.out.println("\n");
 		
 		while(true) { 
 			try {
@@ -269,6 +277,8 @@ public class ConsoleMenu {
 					trackerInput = sc.nextInt();
 					if(trackerInput < 0 || trackerInput > trackers.size())
 						System.out.println("Invalid tracker number");
+					else if(trackerInput == 0)
+						return;
 				} while(trackerInput < 0 || trackerInput > trackers.size());
 				
 				// Get show from the selected tracker
@@ -318,9 +328,10 @@ public class ConsoleMenu {
 				} while(statusInput < 1 || statusInput > 5);
 				
 				Tracker newTracker = new Tracker(sessionID, show.getId(), episodeInput, seasonInput, --statusInput);
-				System.out.println(newTracker.toString());
-				if (db.updateTracker(newTracker))
+				if (db.updateTracker(newTracker)) {
+					System.out.println("-------------------------------------------------------------------------------------");
 					System.out.println("Updated tracker for " + show.getTitle());
+				}
 				else 
 					System.out.println("Failed to update");
 				
