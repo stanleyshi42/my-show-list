@@ -175,7 +175,7 @@ public class ConsoleMenu {
 					break;
 				case 2:
 					//TODO
-					AddMenu(sc);
+					addMenu(sc);
 					break;
 				case 3:
 					deleteMenu(sc);
@@ -209,27 +209,52 @@ public class ConsoleMenu {
 		System.out.println();
 	}
 	
-	private void AddMenu(Scanner sc) {
+	private void addMenu(Scanner sc) {
 		// TODO Auto-generated method stub
 			List<Show> allshows = db.getAllShows(); 
 			List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 			System.out.println("=====Add Menu for All Shows=====");
 			printAddMenuItems(allshows); 
+			System.out.println();
+			System.out.println();
+			// Prompt user for input
 			while(true) { 
+			try {	
 				System.out.println();
-				System.out.println("Enter a ShowID:");
-			sc.nextInt();		
-			int addmenuoption=sc.nextInt();	
-
-			try {
-				System.out.println("\n Select the show you want to track ");
-				String sc2=sc.nextLine();
-				
-				
-				
-//				Scanner sc2 = new Scanner(System.in);
-//					int userInput2 = sc2.nextInt();
-				
+				System.out.println("Enter a ShowID:");		
+				int userinput=sc.nextInt();	
+				if (userinput == 0) {
+					return;
+				} 
+				for (Tracker t : trackers) {
+								if (userinput == t.getShowID()) {
+									System.out.println("Already in the the trackers list");
+									addMenu(sc);
+									return;
+					}					
+				} 
+				if (userinput > 0 && userinput <= allshows.size()) {	
+					System.out.println("Enter what episode you are on: ");
+					int episodeInput=sc.nextInt();
+					
+					System.out.println("Enter what season you are on: ");
+					int seasonInput=sc.nextInt();
+					
+					System.out.println("==Status options==");
+					System.out.println("[1] Watching");
+					System.out.println("[2] Completed");
+					System.out.println("[3] On Hold");
+					System.out.println("[4] Dropped");	
+					System.out.println("[5] Plan to watch ");
+					int statusInput=sc.nextInt();
+					statusInput--;
+					
+					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput,
+							seasonInput, statusInput);
+					db.addTracker(newTracker);
+							return;
+				}	
+							
 				
 			} catch(Exception e) {
 				e.printStackTrace();
