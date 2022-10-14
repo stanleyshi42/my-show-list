@@ -70,6 +70,7 @@ public class ConsoleMenu {
 				if(user != null) {
 					sessionID = user.getUser_id();
 					userMenu(sc);
+					return;
 				}
 				else {
 					throw new LoginException();
@@ -77,7 +78,6 @@ public class ConsoleMenu {
 			}
 			catch(LoginException e) {
 				System.out.println(e.getMessage());
-				sc.nextLine();
 			}
 			catch (Exception e) {
 				e.printStackTrace();

@@ -3,7 +3,7 @@ package com.cognixia.jump.exceptions;
 public class LoginException extends Exception{
 	
 	public LoginException() {
-		super("Invalid login attempt");
+		super("Invalid username/password");
 	}
 	
 	public LoginException(String str) {
