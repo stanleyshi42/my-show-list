@@ -60,7 +60,7 @@ public class ConsoleMenu {
 				System.out.println("Enter your password:");
 				String password=sc.nextLine();
 				
-				User user = login(username, password);
+				User user = Helper.login(username, password, db);
 				// If login was successful, log the user in
 				if(user != null) {
 					sessionID = user.getUser_id();
@@ -80,16 +80,6 @@ public class ConsoleMenu {
 			}
 		}
 	}
-	
-	private User login(String username, String password) {
-		User user = db.getUserByUsername(username);
-		// If login credentials are valid, return the user
-		if(user != null && password.equals(user.getPassword())) {
-			return user;
-		}
-		// Else, return null
-		return null;
-	}	
 
 	private void regMenu(Scanner sc) {
 		sc.nextLine();	// Clear scanner buffer
@@ -134,45 +124,11 @@ public class ConsoleMenu {
 		}
 	}
 	
-	private void printTrackers(List<Tracker> trackers) {
-		System.out.format("%35s%10s%10s%15s",
-						  "Show", "Episodes", "Seasons", "Status");
-		for(Tracker t : trackers) {
-			Show show = db.getShowById(t.getShowID());
-			
-			System.out.println();
-			System.out.format("%35s%10s%10s%15s",
-					show.getTitle(),
-					t.getCurrentEpisode() + "/" + show.getEpisodes(),
-					t.getCurrentSeason() + "/" + show.getSeasons(),
-					db.getStatus(t.getStatusID()));
-		}
-		System.out.println();
-	}
-	
-	private void printTrackersWithIndex(List<Tracker> trackers) {
-		System.out.format("%15s%-35s%10s%10s%15s",
-						  "Tracker Number ", "Show", "Episodes", "Seasons", "Status");
-		for(int i=0; i<trackers.size();i++) {
-			Tracker t = trackers.get(i);
-			Show show = db.getShowById(t.getShowID());
-			
-			System.out.println();
-			System.out.format("%15s%-35s%10s%10s%15s",
-					"[" + (int)(i+1) + "] ",
-					show.getTitle(),
-					t.getCurrentEpisode() + "/" + show.getEpisodes(),
-					t.getCurrentSeason() + "/" + show.getSeasons(),
-					db.getStatus(t.getStatusID()));
-		} 
-		System.out.println();
-	}
-	
 	private void userMenu(Scanner sc) {
 		// Get and print a user's trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("==Progress Trackers==");
-		printTrackers(trackers);
+		Helper.printTrackers(trackers, db);
 		System.out.println();
 		
 		while(true){
@@ -211,28 +167,11 @@ public class ConsoleMenu {
 		}
 	}
 	
-	private void printShowsWithIndex(List<Show> shows) {
-		System.out.format("%10s%-35s%10s%10s",
-						  "Show ID ", "Show", "Seasons", "Episodes");
-							
-		for(int i=0; i<shows.size(); i++) {
-		Show s = shows.get(i);
-		System.out.println();
-		System.out.format("%10s%-35s%10s%10s",
-						  s.getId() + " ",
-						  s.getTitle(),
-						  s.getSeasons(),
-						  s.getEpisodes());
-
-		}
-		System.out.println();
-	}
-	
 	private void addMenu(Scanner sc) {
 		List<Show> shows = db.getAllShows(); 
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("=====Add a Tracker=====");
-		printShowsWithIndex(shows);
+		Helper.printShowsWithIndex(shows);
 		
 		// Prompt user for input
 		while(true) { 
@@ -313,7 +252,6 @@ public class ConsoleMenu {
 	
 	private void printUpdateMenuItems(List<Show> Shows) {
 		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
-		
 							
 		for(int i=0; i<Shows.size(); i++) {
 		Show s = Shows.get(i);
@@ -390,7 +328,7 @@ public class ConsoleMenu {
 		// Print the user's trackers
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("==Delete a Tracker==");
-		printTrackersWithIndex(trackers); 
+		Helper.printTrackersWithIndex(trackers, db); 
 		System.out.format("%15s%-10s", "[0] ", "Go back");
 		System.out.println();
 		System.out.println();
