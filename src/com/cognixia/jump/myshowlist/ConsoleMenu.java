@@ -199,24 +199,28 @@ public class ConsoleMenu {
 	}
 	
 	
-	private void printAddMenuItems(List<Show> Shows) {
-		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
+	private void printShowsWithIndex(List<Show> shows) {
+		System.out.format("%10s%-35s%10s%10s",
+						  "Show ID ", "Show", "Seasons", "Episodes");
 							
-		for(int i=0; i<Shows.size(); i++) {
-		Show s = Shows.get(i);
-			System.out.println();
-		System.out.format("%10s%35s%10s%10s%10s", "[" + (int)(i+1) + "] ",
-				db.getShowById(s.getId()).getTitle(), s.getId(), s.getSeasons(), s.getEpisodes());
+		for(int i=0; i<shows.size(); i++) {
+		Show s = shows.get(i);
+		System.out.println();
+		System.out.format("%10s%-35s%10s%10s",
+						  s.getId() + " ",
+						  s.getTitle(),
+						  s.getSeasons(),
+						  s.getEpisodes());
 		}
 		System.out.println();
 	}
 	
 	private void addMenu(Scanner sc) {
-		List<Show> allshows = db.getAllShows(); 
+		List<Show> shows = db.getAllShows(); 
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
-		System.out.println("=====Add Menu for All Shows=====");
-		printAddMenuItems(allshows); 
-
+		System.out.println("=====Add a Tracker=====");
+		printShowsWithIndex(shows);
+		
 		// Prompt user for input
 		while(true) { 
 			try {	
@@ -233,7 +237,7 @@ public class ConsoleMenu {
 						return;
 					}					
 				} 
-				if (userinput > 0 && userinput <= allshows.size()) {	
+				if (userinput > 0 && userinput <= shows.size()) {	
 					System.out.println("Enter what episode you are on: ");
 					int episodeInput=sc.nextInt();
 					
