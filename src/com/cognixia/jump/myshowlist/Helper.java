@@ -16,35 +16,48 @@ public class Helper {
 	public static void printTrackers(List<Tracker> trackers, DAOClass db) {
 		System.out.format("%35s%10s%10s%15s",
 						  "Show", "Episodes", "Seasons", "Status");
-		for(Tracker t : trackers) {
-			Show show = db.getShowById(t.getShowID());
-			
-			System.out.println();
-			System.out.format("%35s%10s%10s%15s",
-					show.getTitle(),
-					t.getCurrentEpisode() + "/" + show.getEpisodes(),
-					t.getCurrentSeason() + "/" + show.getSeasons(),
-					db.getStatus(t.getStatusID()));
+		System.out.println();
+		
+		if(trackers.isEmpty()) {
+			System.out.format("%35s", "No trackers to display");
+		}
+		else {
+			for(Tracker t : trackers) {
+				Show show = db.getShowById(t.getShowID());
+				
+				System.out.format("%35s%10s%10s%15s",
+						show.getTitle(),
+						t.getCurrentEpisode() + "/" + show.getEpisodes(),
+						t.getCurrentSeason() + "/" + show.getSeasons(),
+						db.getStatus(t.getStatusID()));
+			}
 		}
 		System.out.println();
 	}
 	
 	public static void printTrackersWithIndex(List<Tracker> trackers, DAOClass db) {
-		System.out.format("%15s%-35s%10s%10s%15s",
-						  "Tracker Number ", "Show", "Episodes", "Seasons", "Status");
-		for(int i=0; i<trackers.size();i++) {
-			Tracker t = trackers.get(i);
-			Show show = db.getShowById(t.getShowID());
-			
-			System.out.println();
-			System.out.format("%15s%-35s%10s%10s%15s",
-					"[" + (int)(i+1) + "] ",
-					show.getTitle(),
-					t.getCurrentEpisode() + "/" + show.getEpisodes(),
-					t.getCurrentSeason() + "/" + show.getSeasons(),
-					db.getStatus(t.getStatusID()));
-		} 
+		System.out.format("%9s%-35s%10s%10s%15s",
+						  "Tracker ", "Show", "Episodes", "Seasons", "Status");
 		System.out.println();
+		if(trackers.isEmpty()) {
+			System.out.format("%9s%-35s", "", "No trackers to display");
+			System.out.println();
+		}
+		else {
+			for(int i=0; i<trackers.size();i++) {
+				Tracker t = trackers.get(i);
+				Show show = db.getShowById(t.getShowID());
+				
+				
+				System.out.format("%9s%-35s%10s%10s%15s",
+						"[" + (int)(i+1) + "] ",
+						show.getTitle(),
+						t.getCurrentEpisode() + "/" + show.getEpisodes(),
+						t.getCurrentSeason() + "/" + show.getSeasons(),
+						db.getStatus(t.getStatusID()));
+				System.out.println();
+			} 
+		}
 	}
 	
 	public static void printShowsWithIndex(List<Show> shows) {

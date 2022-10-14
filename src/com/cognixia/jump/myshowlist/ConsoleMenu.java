@@ -173,7 +173,7 @@ public class ConsoleMenu {
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("=====Update a Tracker=====");
 		Helper.printTrackersWithIndex(trackers, db);
-		System.out.format("%15s%-35s",
+		System.out.format("%9s%-35s",
 				  		  "[0] ", "Go back");
 		System.out.println("\n");
 		
@@ -182,7 +182,7 @@ public class ConsoleMenu {
 				// Prompt user for a tracker to update
 				int trackerInput;
 				do {
-					System.out.println("Enter a [Tracker Number] to update:");	
+					System.out.println("Enter a [Tracker] to update:");	
 					trackerInput = sc.nextInt();
 					if(trackerInput < 0 || trackerInput > trackers.size())
 						System.out.println("Invalid tracker number");
@@ -364,16 +364,15 @@ public class ConsoleMenu {
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("==Delete a Tracker==");
 		Helper.printTrackersWithIndex(trackers, db); 
-		System.out.format("%15s%-10s", "[0] ", "Go back");
-		System.out.println();
-		System.out.println();
+		System.out.format("%9s%-10s", "[0] ", "Go back");
+		System.out.println("\n");
+		
 		// Prompt user for input
 		while(true){
 			try {
-				System.out.println("Enter the [Tracker Number] to be deleted:");
-				
-				int userInput=sc.nextInt();
+				System.out.println("Enter a [Tracker] to delete:");
 
+				int userInput=sc.nextInt();
 				if (userInput == 0) {
 					return;	// Go back to userMenu
 				} 
