@@ -149,7 +149,7 @@ public class ConsoleMenu {
 					deleteMenu(sc);
 					break;
 				case 4:
-					sessionID = -1;	// Resets current user
+					sessionID = -1;	// Logout the current user
 					return;	// Go back to loginMenu
 				default:
 					throw new MenuOptionException();
@@ -176,8 +176,8 @@ public class ConsoleMenu {
 		// Prompt user for input
 		while(true) { 
 			try {	
-				System.out.println();
-				System.out.println("Enter a ShowID:" +  " [0] " + " to Go back");		
+				System.out.println("      [0]" + " Go back");
+				System.out.println("Enter a [Show ID] to track:");		
 				int userinput=sc.nextInt();	
 				if (userinput == 0)
 					return;
@@ -185,11 +185,11 @@ public class ConsoleMenu {
 				// Check if show is already being tracked
 				for (Tracker t : trackers) {
 					if (userinput == t.getShowID()) {
-						System.out.println("Already in the the trackers list");
+						System.out.println("Already tracking " + db.getShowById(t.getShowID()).getTitle());
 						addMenu(sc);
 						return;
-					}					
-				} 
+					}
+				}
 
 				if (userinput > 0 && userinput <= shows.size()) {
 					System.out.println("Enter what episode you are on: " +  " [0] " + " to Go back");
@@ -199,7 +199,7 @@ public class ConsoleMenu {
 						System.out.println("The actual max episode is " + db.getShowById(userinput).getEpisodes());
 						System.out.println("Please enter new episode option: " + " [0] " + " to Go back");
 						episodeInput=sc.nextInt();
-					} 
+					}
 					if (episodeInput == 0); {
 						addMenu(sc);
 					}

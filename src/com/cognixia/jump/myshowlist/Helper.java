@@ -49,16 +49,16 @@ public class Helper {
 	
 	public static void printShowsWithIndex(List<Show> shows) {
 		System.out.format("%10s%-35s%10s%10s",
-						  "Show ID ", "Show", "Seasons", "Episodes");
+						  "Show ID ", "Show", "Episodes", "Seasons");
 							
 		for(int i=0; i<shows.size(); i++) {
 		Show s = shows.get(i);
 		System.out.println();
 		System.out.format("%10s%-35s%10s%10s",
-						  s.getId() + " ",
+						  "[" + s.getId() + "] ",
 						  s.getTitle(),
-						  s.getSeasons(),
-						  s.getEpisodes());
+						  s.getEpisodes(),
+						  s.getSeasons());
 		}
 		System.out.println();
 	}
