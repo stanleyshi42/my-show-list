@@ -19,7 +19,8 @@ public class ConsoleMenu {
 				System.out.println("Enter an option:");
 				System.out.println("[1] Login");
 				System.out.println("[2] Register");
-				System.out.println("[3] Exit Program");
+				System.out.println("[3] View show stats");
+				System.out.println("[4] Exit program");
 				
 				int userInput = sc.nextInt();
 				switch (userInput) {
@@ -30,6 +31,9 @@ public class ConsoleMenu {
 					regMenu(sc);
 					break;
 				case 3:
+					statsMenu(sc);
+					break;
+				case 4:
 					System.out.println("Exiting program");
 					System.exit(0);
 					break;
@@ -136,7 +140,8 @@ public class ConsoleMenu {
 				System.out.println("[1] Update a tracker");
 				System.out.println("[2] Add a tracker");
 				System.out.println("[3] Delete a tracker");
-				System.out.println("[4] Logout");
+				System.out.println("[4] View show stats");
+				System.out.println("[5] Logout");
 				
 				int userInput=sc.nextInt();
 				switch (userInput) {
@@ -150,6 +155,9 @@ public class ConsoleMenu {
 					deleteMenu(sc);
 					break;
 				case 4:
+					statsMenu(sc);
+					break;
+				case 5:
 					sessionID = -1;	// Logout the current user
 					return;	// Go back to loginMenu
 				default:
@@ -168,7 +176,6 @@ public class ConsoleMenu {
 		}
 	}
 	
-	// Update Menu
 	private void updateMenu(Scanner sc) {
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("=====Update a Tracker=====");
@@ -350,6 +357,7 @@ public class ConsoleMenu {
 				else
 					System.out.println("Failed to add tracker");
 				
+				addMenu(sc);
 				return; // Return to previous menu
 			}
 			catch(Exception e) {
@@ -380,9 +388,9 @@ public class ConsoleMenu {
 					db.deleteTracker(trackers.get(userInput-1));
 					Show deletedShow =  db.getShowById(trackers.get(userInput-1).getShowID());
 					System.out.println("-------------------------------------------------------------------------------------");
-					System.out.println("Tracker for \"" + deletedShow.getTitle() + "\" deleted");
+					System.out.println("Deleted tracker for " + deletedShow.getTitle());
 					deleteMenu(sc);
-					return;	// Return to the previous menu, either a deleteMenu or the userMenu
+					return;	// Return to the previous menu
 				} else {
 					throw new MenuOptionException();
 				}
@@ -396,6 +404,28 @@ public class ConsoleMenu {
 				sc.nextLine();
 	        } 
 			catch(Exception e) {
+				e.printStackTrace();
+				sc.nextLine();	// Clear scanner buffer
+			}
+		}
+	}
+	
+	private void statsMenu(Scanner sc) {
+		while(true){
+			try {
+				List<Show> shows = db.getAllShows();
+				System.out.println("==Show Stats==");
+				Helper.printShowStats(shows, db);
+				System.out.println();
+				System.out.println("Press [Enter] to go back");
+				sc.nextLine();
+				sc.nextLine();
+				return;
+				
+			} catch (InputMismatchException e) {
+				System.out.println("Invalid menu option");
+				sc.nextLine();
+			}  catch(Exception e) {
 				e.printStackTrace();
 				sc.nextLine();	// Clear scanner buffer
 			}
