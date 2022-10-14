@@ -81,7 +81,6 @@ public class ConsoleMenu {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				sc.nextLine();
 			}
 		}
 	}
@@ -99,15 +98,15 @@ public class ConsoleMenu {
 				System.out.println("Enter your desired password:");
 				String password=sc.nextLine();
 				if(password.isEmpty()) {
-					throw new LoginException("Password");
+					throw new LoginException("password");
 				}
-				
-				boolean added = db.addUser(username, password);
+
 				// If registration was successful, log the user in
-				if(added) {
-					sessionID = db.getUserByUsername(username).getUser_id();
+				if(db.addUser(username, password)) {
+					Helper.login(username, password, db);
 					System.out.println("Succesfully registered!");
 					userMenu(sc);
+					return;
 				}
 				else {
 					throw new LoginException(1);
@@ -115,7 +114,6 @@ public class ConsoleMenu {
 			}
 			catch(LoginException e) {
 				System.out.println(e.getMessage());
-				sc.nextLine();
 			}
 			catch(Exception e) {
 				e.printStackTrace();
