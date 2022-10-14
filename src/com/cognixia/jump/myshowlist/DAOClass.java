@@ -14,7 +14,7 @@ public class DAOClass {
 	public List<Show> getAllShows() {
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Shows");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM shows");
 			List<Show> showList = new ArrayList<Show>();
 			
 			while(rs.next()) {
@@ -28,7 +28,7 @@ public class DAOClass {
 			}
 			return showList;
 		} catch (SQLException e) {
-			System.out.println("Could not retrieve list of shows from database");
+			//e.printStackTrace();
 		}
 		return null;
 	}
@@ -36,7 +36,7 @@ public class DAOClass {
 	public List<Tracker> getAllTrackers() {
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM Trackers");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM trackers");
 			List<Tracker> trackerList = new ArrayList<Tracker>();
 			
 			while(rs.next()) {
@@ -50,9 +50,8 @@ public class DAOClass {
 				trackerList.add(trak);
 			}
 			return trackerList;
-			
 		} catch (SQLException e) {
-			System.out.println("Could not retrieve list of trackers from database");
+			//e.printStackTrace();
 		}
 		return null;
 	}
@@ -73,7 +72,6 @@ public class DAOClass {
 
 			return new Show(showID, title, episodes, seasons);
 		} catch (SQLException e) {
-			System.out.println("\"" + showID + "\" not found.");
 			//e.printStackTrace();
 		}
 		return null;
@@ -97,8 +95,6 @@ public class DAOClass {
 
 			return new Tracker(userID, showID, episode, season, status);
 		} catch (SQLException e) {
-			System.out.println("Tracker for userID - " + "\"" + userID + "\"" + "showID - " 
-								+ "\"" + showID + "\" not found.");
 			//e.printStackTrace();
 		}
 		return null;
@@ -107,7 +103,7 @@ public class DAOClass {
 	public List<Tracker> getAllUserTrackers(int userID) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
-				"SELECT * FROM Trackers " +
+				"SELECT * FROM trackers " +
 				"WHERE userID = ? " +
 				"ORDER BY statusID ASC"
 			);
@@ -127,7 +123,6 @@ public class DAOClass {
 			}
 			return trackerList;
 		} catch (SQLException e) {
-			System.out.println("Could not retrieve user's trackers from database");
 			//e.printStackTrace();
 		}
 		return null;
@@ -136,7 +131,7 @@ public class DAOClass {
 	public User getUserByUsername(String username) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
-				"SELECT * FROM Users " +
+				"SELECT * FROM users " +
 				"WHERE username = ?"
 			);
 			pstmt.setString(1, username);
@@ -150,7 +145,6 @@ public class DAOClass {
 
 			return new User(id, name, password);
 		} catch (SQLException e) {
-			System.out.println("\"" + username + "\" not found.");
 			//e.printStackTrace();
 		}
 		return null;
@@ -169,14 +163,11 @@ public class DAOClass {
 			pstmt.setInt(5, trak.getStatusID());
 			
 			int i = pstmt.executeUpdate();
-			if(i > 0) {
+			if(i > 0)
 				return true;
-			}
-			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
-		
 		return false;
 	}
 	
@@ -190,11 +181,10 @@ public class DAOClass {
 			pstmt.setInt(2, trak.getShowID());
 			
 			int i = pstmt.executeUpdate();
-			if(i > 0) {
+			if(i > 0)
 				return true;
-			}
 		} catch (SQLException e) {
-			System.out.println("Tracker not found.");
+			//e.printStackTrace();
 		}
 		return false;
 	}
@@ -209,12 +199,10 @@ public class DAOClass {
 			pstmt.setInt(2, showID);
 			
 			int i = pstmt.executeUpdate();
-			if(i > 0) {
+			if(i > 0)
 				return true;
-			}
 		} catch (SQLException e) {
-			System.out.println("Tracker for userID - " + "\"" + userID + "\"" + "showID - " 
-					+ "\"" + showID + "\" not found.");
+			//e.printStackTrace();
 		}
 		return false;
 	}
@@ -222,7 +210,7 @@ public class DAOClass {
 	public boolean updateTracker(Tracker trak) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
-				"UPDATE Trackers " +
+				"UPDATE trackers " +
 				"SET currentEpisode = ?, currentSeason = ?, statusID = ? " +
 				"WHERE userID = ? AND showID = ?"
 			);
@@ -234,7 +222,6 @@ public class DAOClass {
 
 			if(pstmt.executeUpdate()>0)
 				return true;
-			
 		} catch (SQLException e) {
 			//e.printStackTrace();
 		}
@@ -244,7 +231,7 @@ public class DAOClass {
 	public String getStatus(int id) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
-				"SELECT * FROM Statuses " +
+				"SELECT * FROM statuses " +
 				"WHERE statusID = ?"
 			);
 			pstmt.setInt(1, id);
@@ -262,22 +249,18 @@ public class DAOClass {
 	public boolean addUser(String username, String password) {
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(
-				"INSERT INTO Users(username, password) " +
+				"INSERT INTO users(username, password) " +
 				"VALUES(?, ?)"
 			);
 			pstmt.setString(1, username);
 			pstmt.setString(2, password);
 			
 			int i = pstmt.executeUpdate();
-			
-			if(i > 0) {
+			if(i > 0)
 				return true;
-			}
-			
 		} catch (SQLException e) {
 			//e.printStackTrace();
 		}
-
 		return false;
 	}
 }
