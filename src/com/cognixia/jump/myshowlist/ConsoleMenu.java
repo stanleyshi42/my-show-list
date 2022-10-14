@@ -252,24 +252,24 @@ public class ConsoleMenu {
 	}
 	
 	
-	private void printUpdateMenuItems(List<Show> Shows) {
-		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
-							
-		for(int i=0; i<Shows.size(); i++) {
-		Show s = Shows.get(i);
-			System.out.println();
-		System.out.format("%10s%35s%10s%10s%10s", "[" + (int)(i+1) + "] ",
-				db.getShowById(s.getId()).getTitle(), s.getId(), s.getSeasons(), s.getEpisodes());
-		}
-		System.out.println();
-	}
+//	private void printUpdateMenuItems(List<Tracker> Trackers) {
+//		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
+//							
+//		for(int i=0; i<Trackers.size(); i++) {
+//		Show s = Trackers.get(i);
+//			System.out.println();
+//		System.out.format("%10s%35s%10s%10s%10s", "[" + (int)(i+1) + "] ",
+//				db.getShowById(s.getId()).getTitle(), s.getId(), s.getSeasons(), s.getEpisodes());
+//		}
+//		System.out.println();
+//	}
 	// Update Menu
 	private void updateMenu(Scanner sc) {
 		// TODO Auto-generated method stub
-			List<Show> allshows = db.getAllShows(); 
 			List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 			System.out.println("=====Update Menu for All Shows=====");
-			printUpdateMenuItems(allshows); 
+			Helper.printTrackersWithIndex(trackers, db); 
+			System.out.format("%15s%-10s", "[0] ", "Go back");
 			System.out.println();
 			System.out.println();
 			// Prompt user for input
@@ -282,13 +282,13 @@ public class ConsoleMenu {
 					return;
 				} 
 				for (Tracker t : trackers) {
-								if (userinput == t.getShowID()) {
-									System.out.println("Already updated in the list");
-									updateMenu(sc);
-									return;
+					if (userinput == t.getShowID()) {
+						System.out.println("Already updated in the list");
+						updateMenu(sc);
+						return;
 					}					
 				} 
-				if (userinput > 0 && userinput <= allshows.size()) {	
+				if (userinput > 0 && userinput <= trackers.size()) {	
 					System.out.println("What show are you on now?: ");
 					int showInput=sc.nextInt();
 					
@@ -303,7 +303,6 @@ public class ConsoleMenu {
 					System.out.println("[2] In Progress");
 					System.out.println("[3] Completed");
 					int statusInput=sc.nextInt();
-					statusInput--;
 					
 					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput,
 							seasonInput, statusInput);
