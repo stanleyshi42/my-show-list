@@ -1,5 +1,6 @@
 package com.cognixia.jump.myshowlist;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import com.cognixia.jump.exceptions.LoginException;
@@ -36,6 +37,10 @@ public class ConsoleMenu {
 					throw new MenuOptionException();
 				}
 			} 
+			catch (InputMismatchException e) {
+				System.out.println("Input was not a valid integer");
+				sc.nextLine();
+			}
 			catch (MenuOptionException e) {
 				System.out.println(e.getMessage());
 				sc.nextLine();
@@ -156,8 +161,10 @@ public class ConsoleMenu {
 				default:
 					throw new MenuOptionException();
 				}
-			}
-			catch (MenuOptionException e) {
+			} catch (InputMismatchException e) {
+				System.out.println("Input was not a valid integer");
+				sc.nextLine();
+			} catch (MenuOptionException e) {
 				System.out.println(e.getMessage());
 				sc.nextLine();
 	        } catch(Exception e) {
@@ -240,11 +247,21 @@ public class ConsoleMenu {
 					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput, seasonInput, statusInput);
 					db.addTracker(newTracker);
 					return;
+				} else {
+					throw new MenuOptionException();
 				}
 			}
+			catch (InputMismatchException e) {
+				System.out.println("Input was not a valid integer");
+				sc.nextLine();
+			}
+			catch (MenuOptionException e) {
+				System.out.println(e.getMessage());
+				sc.nextLine();
+	        } 
 			catch(Exception e) {
 				e.printStackTrace();
-
+				sc.nextLine();	// Clear scanner buffer
 			}
 		}
 	}
@@ -307,19 +324,25 @@ public class ConsoleMenu {
 							seasonInput, statusInput);
 					db.addTracker(newTracker);
 							return;
-				}	
+				} else {
+					throw new MenuOptionException();
+				}
 							
 				
-			} catch(Exception e) {
+			} catch (InputMismatchException e) {
+				System.out.println("Input was not a valid integer");
+				sc.nextLine();
+			}
+			catch (MenuOptionException e) {
+				System.out.println(e.getMessage());
+				sc.nextLine();
+	        } 
+			catch(Exception e) {
 				e.printStackTrace();
+				sc.nextLine();	// Clear scanner buffer
 			}
-						
-			
-
 		
-		
-		
-			}
+		}
 	
 		
 	}
@@ -338,6 +361,7 @@ public class ConsoleMenu {
 				System.out.println("Enter the [Tracker Number] to be deleted:");
 				
 				int userInput=sc.nextInt();
+
 				if (userInput == 0) {
 					return;	// Go back to userMenu
 				} 
@@ -351,6 +375,10 @@ public class ConsoleMenu {
 				} else {
 					throw new MenuOptionException();
 				}
+			}
+			catch (InputMismatchException e) {
+				System.out.println("Input was not a valid integer");
+				sc.nextLine();
 			}
 			catch (MenuOptionException e) {
 				System.out.println(e.getMessage());
