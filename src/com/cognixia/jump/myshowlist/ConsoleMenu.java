@@ -211,7 +211,6 @@ public class ConsoleMenu {
 		}
 	}
 	
-	
 	private void printShowsWithIndex(List<Show> shows) {
 		System.out.format("%10s%-35s%10s%10s",
 						  "Show ID ", "Show", "Seasons", "Episodes");
@@ -224,6 +223,7 @@ public class ConsoleMenu {
 						  s.getTitle(),
 						  s.getSeasons(),
 						  s.getEpisodes());
+
 		}
 		System.out.println();
 	}
@@ -238,7 +238,7 @@ public class ConsoleMenu {
 		while(true) { 
 			try {	
 				System.out.println();
-				System.out.println("Enter a ShowID:");		
+				System.out.println("Enter a ShowID:" +  " [0] " + " to Go back");		
 				int userinput=sc.nextInt();	
 				if (userinput == 0) {
 					return;
@@ -250,12 +250,38 @@ public class ConsoleMenu {
 						return;
 					}					
 				} 
+
+
 				if (userinput > 0 && userinput <= shows.size()) {	
-					System.out.println("Enter what episode you are on: ");
-					int episodeInput=sc.nextInt();
+
+				
+						System.out.println("Enter what episode you are on: " +  " [0] " + " to Go back");
+					int episodeInput=sc.nextInt();	
+					while (episodeInput > db.getShowById(userinput).getEpisodes()); {					
+						System.out.println("\n");
+						System.out.println("The actual max episode is " + db.getShowById(userinput).getEpisodes());
+						System.out.println("Please enter new episode option: " + " [0] " + " to Go back");
+						episodeInput=sc.nextInt();						
+					} 
+					if (episodeInput == 0); {
+						addMenu(sc);
+					}
+
 					
 					System.out.println("Enter what season you are on: ");
 					int seasonInput=sc.nextInt();
+					while(true) {
+					if	(seasonInput >= db.getShowById(userinput).getSeasons()) {							 
+						System.out.println("\n");
+						System.out.println("The actual max season is " + db.getShowById(userinput).getSeasons());
+						System.out.println("Please enter new season option: " + " [0] " + " to Go back");
+						seasonInput=sc.nextInt();						
+						}
+						
+					if (seasonInput == 0); {
+						addMenu(sc);
+						}
+					}
 					
 					System.out.println("==Status options==");
 					System.out.println("[1] Watching");
@@ -264,7 +290,17 @@ public class ConsoleMenu {
 					System.out.println("[4] Dropped");	
 					System.out.println("[5] Plan to watch ");
 					int statusInput=sc.nextInt();
-					statusInput--;
+					statusInput--;					
+						if (statusInput > 5) {
+							System.out.println("\n");
+							System.out.println("This is not a valid option");
+							addMenu(sc);
+							return;
+						}	else if (statusInput == 0) {
+							addMenu(sc);
+							return;
+						}
+					
 					
 					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput, seasonInput, statusInput);
 					db.addTracker(newTracker);
@@ -273,8 +309,13 @@ public class ConsoleMenu {
 			}
 			catch(Exception e) {
 				e.printStackTrace();
-			}	
-		}
+
+			}
+						
+	
+			}
+	
+
 	}
 	
 	private void deleteMenu(Scanner sc) {
