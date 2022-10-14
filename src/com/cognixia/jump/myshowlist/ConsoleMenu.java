@@ -202,7 +202,7 @@ public class ConsoleMenu {
 					}					
 					System.out.println("Enter what season you are on: ");
 					int seasonInput=sc.nextInt();
-					if (seasonInput >= db.getShowById(userinput).getSeasons()) {							 
+					if (seasonInput > db.getShowById(userinput).getSeasons()) {							 
 						System.out.println("\n");
 						System.out.println("The actual max season is " + db.getShowById(userinput).getSeasons());
 						seasonInput=db.getShowById(userinput).getSeasons();				
@@ -215,8 +215,7 @@ public class ConsoleMenu {
 					System.out.println("[3] On Hold");
 					System.out.println("[4] Dropped");	
 					System.out.println("[5] Plan to watch ");
-					int statusInput=sc.nextInt();
-					statusInput--;					
+					int statusInput=sc.nextInt();				
 					if (statusInput > 5) {
 						do {	System.out.println("\n");
 								System.out.println("This is not a valid option");
@@ -231,24 +230,23 @@ public class ConsoleMenu {
 						} while(statusInput > 5);
 						
 						}	
-					else if (statusInput == 0 || episodeInput == 0 || seasonInput == 0) {
-							userMenu(sc);
-						
+						if (statusInput == 0 || episodeInput == 0 || seasonInput == 0) {
+							return;
 						}
 					
 					
-					
-					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput, seasonInput, statusInput);
+					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput, seasonInput, --statusInput);
 					db.addTracker(newTracker);
+					if (db.addTracker(newTracker)) {
+						System.out.println("Show is successfully added");
+					}
 					userMenu(sc);
-					
 				}
 			}
 			catch(Exception e) {
 				e.printStackTrace();
 
 			}
-		System.out.println("Show is successfully added");
 		}
 		
 	}
