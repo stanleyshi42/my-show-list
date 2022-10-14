@@ -7,10 +7,10 @@ public class LoginException extends Exception{
 	}
 	
 	public LoginException(String str) {
-		super(str + " was not valid. Please try registering again.");
+		super("Invalid " + str + ". Please try registering again.");
 	}
 	
 	public LoginException(int i) {
-		super("User is already registered");
+		super("That username is already registered");
 	}
 }
