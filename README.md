@@ -16,7 +16,7 @@ An application for tracking your TV show progress!
 - In Eclipse, configure the my-show-list project to add a classpath to the mysql-connector JAR in the resources folder
 
 # Team Members
-- Adrien O'Hara
+- Aiden O'Hara
 - Jabrel Alexander
 - Sean Bryson
 - Stanley Shi
