@@ -172,70 +172,63 @@ public class ConsoleMenu {
 		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
 		System.out.println("=====Add a Tracker=====");
 		Helper.printShowsWithIndex(shows);
+		System.out.println("      [0] " + "Go back");
 		
 		// Prompt user for input
 		while(true) { 
-			try {	
-				System.out.println();
-				System.out.println("Enter a ShowID:" +  " [0] " + " to Go back");		
-				int userinput=sc.nextInt();	
-				if (userinput == 0)
+			try {
+				System.out.println("Enter a [ShowID] to track:");		
+				int userInput=sc.nextInt();	
+				if (userInput == 0)
 					return;
 				
 				// Check if show is already being tracked
-				for (Tracker t : trackers) {
-					if (userinput == t.getShowID()) {
-						System.out.println("Already in the the trackers list");
+				for (Tracker t: trackers) {
+					if (userInput == t.getShowID()) {
+						System.out.println("Already tracking "+db.getShowById(t.getShowID()).getTitle());
 						addMenu(sc);
 						return;
-					}					
-				} 
-
-				if (userinput > 0 && userinput <= shows.size()) {
-					System.out.println("Enter what episode you are on: ");
-					int episodeInput=sc.nextInt();	
-				if (episodeInput > db.getShowById(userinput).getEpisodes()) {					
-						System.out.println("\n");
-						System.out.println("The actual max episode is " + db.getShowById(userinput).getEpisodes());
-						episodeInput=db.getShowById(userinput).getEpisodes();
-					 
-					}					
-					System.out.println("Enter what season you are on: ");
+					}
+				}
+				
+				if(userInput < 0 || userInput > shows.size()) {
+					System.out.println("Invalid ShowID");
+				}
+				else{
+					System.out.println("Enter episodes watched: ");
+					int episodeInput=sc.nextInt();
+					// If episode input is greater than episode count, set it to the latest episode
+					if (episodeInput > db.getShowById(userInput).getEpisodes())				
+						episodeInput = db.getShowById(userInput).getEpisodes();
+					
+					System.out.println("Enter seasons watched: ");
 					int seasonInput=sc.nextInt();
-					if (seasonInput > db.getShowById(userinput).getSeasons()) {							 
-						System.out.println("\n");
-						System.out.println("The actual max season is " + db.getShowById(userinput).getSeasons());
-						seasonInput=db.getShowById(userinput).getSeasons();				
-						}
-										
+					// If season input is greater than season count, set it to the latest season
+					if (seasonInput > db.getShowById(userInput).getSeasons())
+						seasonInput=db.getShowById(userInput).getSeasons();
 					
-					System.out.println("==Status options==" + " [0] " + " to Go back");
-					System.out.println("[1] Watching");
-					System.out.println("[2] Completed");
-					System.out.println("[3] On Hold");
-					System.out.println("[4] Dropped");	
-					System.out.println("[5] Plan to watch ");
-					int statusInput=sc.nextInt();				
-					if (statusInput > 5) {
-						do {	System.out.println("\n");
-								System.out.println("This is not a valid option");
-								System.out.println("==Status options==" + " [0] " + " to Go back");
-								System.out.println("[1] Watching");
-								System.out.println("[2] Completed");
-								System.out.println("[3] On Hold");
-								System.out.println("[4] Dropped");	
-								System.out.println("[5] Plan to watch ");	
-								sc.nextInt();
-								
-						} while(statusInput > 5);
+					int statusInput;
+					do {
+						System.out.println("==Status Options==");
+						System.out.println("[1] Watching");
+						System.out.println("[2] Completed");
+						System.out.println("[3] On Hold");
+						System.out.println("[4] Dropped");	
+						System.out.println("[5] Plan to watch ");
+						System.out.println("[0] Cancel");
+						System.out.println("Enter a [Status] option:");
+						statusInput=sc.nextInt();
+						if(statusInput > 5)
+							System.out.println("Invalid option");
+						//sc.nextInt();
+					} while(statusInput > 5);
 						
-						}	
-						if (statusInput == 0 || episodeInput == 0 || seasonInput == 0) {
-							return;
-						}
 					
+					if (statusInput == 0 || episodeInput == 0 || seasonInput == 0) {
+						return;
+					}
 					
-					Tracker newTracker = new Tracker(sessionID, userinput, episodeInput, seasonInput, --statusInput);
+					Tracker newTracker = new Tracker(sessionID, userInput, episodeInput, seasonInput, --statusInput);
 					db.addTracker(newTracker);
 					if (db.addTracker(newTracker)) {
 						System.out.println("Show is successfully added");
@@ -248,9 +241,7 @@ public class ConsoleMenu {
 
 			}
 		}
-		
 	}
-	
 	
 	private void printUpdateMenuItems(List<Show> Shows) {
 		System.out.format("%10s%35s%10s%10s%15s", "Show Selector", "Show", "ShowID", "Seasons", "Episodes");
