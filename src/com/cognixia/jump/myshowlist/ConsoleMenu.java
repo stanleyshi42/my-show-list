@@ -72,7 +72,7 @@ public class ConsoleMenu {
 				User user = Helper.login(username, password, db);
 				// If login was successful, log the user in
 				if(user != null) {
-					sessionID = user.getUser_id();
+					sessionID = user.getId();
 					userMenu(sc);
 					return;
 				}
@@ -89,7 +89,7 @@ public class ConsoleMenu {
 			}
 		}
 	}
-
+	
 	private void regMenu(Scanner sc) {
 		sc.nextLine();	// Clear scanner buffer
 		while(true){
@@ -109,7 +109,7 @@ public class ConsoleMenu {
 				// If registration was successful, log the user in
 				if(db.addUser(username, password)) {
 					User user = Helper.login(username, password, db);
-					sessionID = user.getUser_id();
+					sessionID = user.getId();
 					System.out.println("Succesfully registered!");
 					userMenu(sc);
 					return;
@@ -184,26 +184,28 @@ public class ConsoleMenu {
 				  		  "[0] ", "Go back");
 		System.out.println("\n");
 		
-		while(true) { 
+		while(true) {
 			try {
 				// Prompt user for a tracker to update
-				int trackerInput;
+				int trackerInput=-1;
 				do {
 					System.out.println("Enter a [Tracker] to update:");	
 					trackerInput = sc.nextInt();
-					if(trackerInput < 0 || trackerInput > trackers.size())
+					if(trackerInput < 0 || trackerInput > trackers.size()) {
 						System.out.println("Invalid tracker number");
+					}
 					else if(trackerInput == 0)
 						return;
 				} while(trackerInput < 0 || trackerInput > trackers.size());
 				
 				// Get show from the selected tracker
-				Show show = db.getShowById(trackers.get(--trackerInput).getShowID());
+				Show show = db.getShowById(trackers.get(--trackerInput).getShowId());
+				Tracker tracker = db.getTrackerById(trackerInput, show.getId());
 
 				// Prompt user for episodes watched
 				int episodeInput;
 				do {
-					System.out.println("Enter episodes watched, or [Enter] to skip: "); //TODO implement skip
+					System.out.println("Enter episodes watched, or [-1] to skip: "); //TODO implement skip
 					episodeInput=sc.nextInt();
 					
 					// Check for negative input
@@ -253,6 +255,10 @@ public class ConsoleMenu {
 				
 				return; // Return to previous menu
 			}
+			catch (InputMismatchException e) {
+				System.out.println("Invalid input");
+				sc.nextLine();
+			}
 			catch(Exception e) {
 				e.printStackTrace();
 				sc.nextLine();
@@ -280,8 +286,8 @@ public class ConsoleMenu {
 					showInput = sc.nextInt();
 					// Check if show is already being tracked
 					for (Tracker t: trackers) {
-						if (showInput == t.getShowID()) {
-							System.out.println("Already tracking "+db.getShowById(t.getShowID()).getTitle());
+						if (showInput == t.getShowId()) {
+							System.out.println("Already tracking "+db.getShowById(t.getShowId()).getTitle());
 							showInput = -1;
 						}
 					}
@@ -360,6 +366,10 @@ public class ConsoleMenu {
 				addMenu(sc);
 				return; // Return to previous menu
 			}
+			catch (InputMismatchException e) {
+				System.out.println("Invalid input");
+				sc.nextLine();
+			}
 			catch(Exception e) {
 				e.printStackTrace();
 				sc.nextLine();
@@ -386,7 +396,7 @@ public class ConsoleMenu {
 				} 
 				else if (userInput > 0 && userInput <= trackers.size()) {
 					db.deleteTracker(trackers.get(userInput-1));
-					Show deletedShow =  db.getShowById(trackers.get(userInput-1).getShowID());
+					Show deletedShow =  db.getShowById(trackers.get(userInput-1).getShowId());
 					System.out.println("-------------------------------------------------------------------------------------");
 					System.out.println("Deleted tracker for " + deletedShow.getTitle());
 					deleteMenu(sc);
@@ -396,7 +406,7 @@ public class ConsoleMenu {
 				}
 			}
 			catch (InputMismatchException e) {
-				System.out.println("Input was not a valid integer");
+				System.out.println("Invalid input");
 				sc.nextLine();
 			}
 			catch (MenuOptionException e) {

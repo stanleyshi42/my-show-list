@@ -1,34 +1,34 @@
 package com.cognixia.jump.myshowlist;
 
 public class Tracker {
-	private int userID;
-	private int showID;
+	private int userId;
+	private int showId;
 	private int currentEpisode;
 	private int currentSeason;
-	protected int statusID;
+	protected int statusId;
 	
-	public Tracker(int userID, int showID, int currentEpisode, int currentSeason, int statusID) {
-		this.userID = userID;
-		this.showID = showID;
+	public Tracker(int userId, int showId, int currentEpisode, int currentSeason, int statusId) {
+		this.userId = userId;
+		this.showId = showId;
 		this.currentEpisode = currentEpisode;
 		this.currentSeason = currentSeason;
-		this.statusID = statusID;
+		this.statusId = statusId;
 	}
 
-	public int getUserID() {
-		return userID;
+	public int getUserId() {
+		return userId;
 	}
 
-	public void setUserID(int userID) {
-		this.userID = userID;
+	public void setUserId(int userId) {
+		this.userId = userId;
 	}
 
-	public int getShowID() {
-		return showID;
+	public int getShowId() {
+		return showId;
 	}
 
-	public void setShowID(int showID) {
-		this.showID = showID;
+	public void setShowId(int showId) {
+		this.showId = showId;
 	}
 
 	public int getCurrentEpisode() {
@@ -47,17 +47,17 @@ public class Tracker {
 		this.currentSeason = currentSeason;
 	}
 
-	public int getStatusID() {
-		return statusID;
+	public int getStatusId() {
+		return statusId;
 	}
 
-	public void setStatusID(int statusID) {
-		this.statusID = statusID;
+	public void setStatusId(int statusId) {
+		this.statusId = statusId;
 	}
 	
 	@Override
 	public String toString() {
-		return "Tracker [userID=" + userID + ", showID=" + showID + ", currentEpisode=" + currentEpisode +
-				", currentSeason=" + currentSeason + ", statusID=" + statusID + "]";
+		return "Tracker [userId=" + userId + ", showId=" + showId + ", currentEpisode=" + currentEpisode +
+				", currentSeason=" + currentSeason + ", statusId=" + statusId + "]";
 	}
 }

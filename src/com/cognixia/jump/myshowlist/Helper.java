@@ -23,13 +23,13 @@ public class Helper {
 		}
 		else {
 			for(Tracker t : trackers) {
-				Show show = db.getShowById(t.getShowID());
+				Show show = db.getShowById(t.getShowId());
 				
 				System.out.format("%35s%10s%10s%15s",
 						show.getTitle(),
 						t.getCurrentEpisode() + "/" + show.getEpisodes(),
 						t.getCurrentSeason() + "/" + show.getSeasons(),
-						db.getStatus(t.getStatusID())
+						db.getStatus(t.getStatusId())
 				);
 				System.out.println();
 			}
@@ -47,7 +47,7 @@ public class Helper {
 		else {
 			for(int i=0; i<trackers.size();i++) {
 				Tracker t = trackers.get(i);
-				Show show = db.getShowById(t.getShowID());
+				Show show = db.getShowById(t.getShowId());
 				
 				
 				System.out.format("%9s%-35s%10s%10s%15s",
@@ -55,7 +55,7 @@ public class Helper {
 						show.getTitle(),
 						t.getCurrentEpisode() + "/" + show.getEpisodes(),
 						t.getCurrentSeason() + "/" + show.getSeasons(),
-						db.getStatus(t.getStatusID())
+						db.getStatus(t.getStatusId())
 				);
 				System.out.println();
 			} 
