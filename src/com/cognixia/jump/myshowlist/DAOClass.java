@@ -14,7 +14,7 @@ public class DAOClass {
 	public List<Show> getAllShows() {
 		try {
 			Statement stmt = conn.createStatement();
-			ResultSet rs = stmt.executeQuery("SELECT * FROM shows");
+			ResultSet rs = stmt.executeQuery("SELECT * FROM shows ORDER BY title");
 			List<Show> showList = new ArrayList<Show>();
 			
 			while(rs.next()) {
@@ -156,11 +156,11 @@ public class DAOClass {
 				"INSERT INTO trackers(userID, showID, currentEpisode, currentSeason, statusID) " +
 				"VALUES(?, ?, ?, ?, ?)"
 			);
-			pstmt.setInt(1, trak.getUserID());
-			pstmt.setInt(2, trak.getShowID());
+			pstmt.setInt(1, trak.getUserId());
+			pstmt.setInt(2, trak.getShowId());
 			pstmt.setInt(3, trak.getCurrentEpisode());
 			pstmt.setInt(4, trak.getCurrentSeason());
-			pstmt.setInt(5, trak.getStatusID());
+			pstmt.setInt(5, trak.getStatusId());
 			
 			int i = pstmt.executeUpdate();
 			if(i > 0)
@@ -177,8 +177,8 @@ public class DAOClass {
 				"DELETE FROM trackers " +
 				"WHERE userID = ? AND showID = ?"
 			);
-			pstmt.setInt(1, trak.getUserID());
-			pstmt.setInt(2, trak.getShowID());
+			pstmt.setInt(1, trak.getUserId());
+			pstmt.setInt(2, trak.getShowId());
 			
 			int i = pstmt.executeUpdate();
 			if(i > 0)
@@ -216,9 +216,9 @@ public class DAOClass {
 			);
 			pstmt.setInt(1, trak.getCurrentEpisode());
 			pstmt.setInt(2, trak.getCurrentSeason());
-			pstmt.setInt(3, trak.getStatusID());
-			pstmt.setInt(4, trak.getUserID());
-			pstmt.setInt(5, trak.getShowID());
+			pstmt.setInt(3, trak.getStatusId());
+			pstmt.setInt(4, trak.getUserId());
+			pstmt.setInt(5, trak.getShowId());
 
 			if(pstmt.executeUpdate()>0)
 				return true;
