@@ -209,7 +209,7 @@ public class ConsoleMenu {
 				validInput = false;
 				int episodeInput;
 				do {
-					System.out.println("Enter episodes watched, or [-1] to make no update:"); //TODO implement skip
+					System.out.println("Enter episodes watched, or [-1] to make no update:");
 					episodeInput=sc.nextInt();
 					
 					// If user skips, don't change their tracker information
