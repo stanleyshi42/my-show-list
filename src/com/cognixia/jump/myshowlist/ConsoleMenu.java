@@ -8,7 +8,7 @@ import com.cognixia.jump.exceptions.MenuOptionException;
 
 public class ConsoleMenu {
 	private DAOClass db = new DAOClass();
-	private int sessionID = -1;	// Tracks which user is currently logged in
+	private int sessionId = -1;	// Tracks which user is currently logged in
 	
 	public void welcomeMenu() {
 		Scanner sc = new Scanner(System.in);
@@ -72,7 +72,7 @@ public class ConsoleMenu {
 				User user = Helper.login(username, password, db);
 				// If login was successful, log the user in
 				if(user != null) {
-					sessionID = user.getId();
+					sessionId = user.getId();
 					userMenu(sc);
 					return;
 				}
@@ -109,7 +109,7 @@ public class ConsoleMenu {
 				// If registration was successful, log the user in
 				if(db.addUser(username, password)) {
 					User user = Helper.login(username, password, db);
-					sessionID = user.getId();
+					sessionId = user.getId();
 					System.out.println("Succesfully registered!");
 					userMenu(sc);
 					return;
@@ -132,7 +132,7 @@ public class ConsoleMenu {
 		while(true){
 			try {
 				// Get and print a user's trackers
-				List<Tracker> trackers = db.getAllUserTrackers(sessionID);
+				List<Tracker> trackers = db.getAllUserTrackers(sessionId);
 				System.out.println("==Progress Trackers==");
 				Helper.printTrackers(trackers, db);
 				System.out.println();
@@ -158,7 +158,7 @@ public class ConsoleMenu {
 					statsMenu(sc);
 					break;
 				case 5:
-					sessionID = -1;	// Logout the current user
+					sessionId = -1;	// Logout the current user
 					return;	// Go back to loginMenu
 				default:
 					throw new MenuOptionException();
@@ -177,7 +177,7 @@ public class ConsoleMenu {
 	}
 	
 	private void updateMenu(Scanner sc) {
-		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
+		List<Tracker> trackers = db.getAllUserTrackers(sessionId);
 		System.out.println("=====Update a Tracker=====");
 		Helper.printTrackersWithIndex(trackers, db);
 		System.out.format("%9s%-35s",
@@ -187,6 +187,7 @@ public class ConsoleMenu {
 		while(true) {
 			try {
 				// Prompt user for a tracker to update
+				boolean validInput = false;
 				int trackerInput=-1;
 				do {
 					System.out.println("Enter a [Tracker] to update:");	
@@ -196,62 +197,94 @@ public class ConsoleMenu {
 					}
 					else if(trackerInput == 0)
 						return;
-				} while(trackerInput < 0 || trackerInput > trackers.size());
+					else
+						validInput = true;
+				} while(!validInput);
 				
 				// Get show from the selected tracker
 				Show show = db.getShowById(trackers.get(--trackerInput).getShowId());
-				Tracker tracker = db.getTrackerById(trackerInput, show.getId());
-
+				Tracker tracker = db.getTrackerById(sessionId, show.getId());
+				
 				// Prompt user for episodes watched
+				validInput = false;
 				int episodeInput;
 				do {
-					System.out.println("Enter episodes watched, or [-1] to skip: "); //TODO implement skip
+					System.out.println("Enter episodes watched, or [-1] to make no update:"); //TODO implement skip
 					episodeInput=sc.nextInt();
 					
+					// If user skips, don't change their tracker information
+					if(episodeInput == -1) {
+						episodeInput = tracker.getCurrentEpisode();
+						validInput = true;
+					}
 					// Check for negative input
-					if(episodeInput < 0)
+					else if(episodeInput < 0)
 						System.out.println("Invalid episode input");
+					else
+						validInput = true;
+					
 					// If episode input is greater than episode count, set it to the latest episode
-					else if (episodeInput > show.getEpisodes())				
+					if (episodeInput > show.getEpisodes())				
 						episodeInput = show.getEpisodes();
-				} while(episodeInput < 0);
+				} while(!validInput);
 
 				// Prompt user for seasons watched
+				validInput = false;
 				int seasonInput;
 				do {
-					System.out.println("Enter seasons watched, or [Enter] to skip: ");
+					System.out.println("Enter seasons watched, or [-1] to make no update:");
 					seasonInput=sc.nextInt();
 					
-					// Check for negative input
-					if(seasonInput < 0)
+					if(seasonInput == -1) {
+						seasonInput = tracker.getCurrentSeason();
+						validInput = true;
+					}
+					else if(seasonInput < 0)
 						System.out.println("Invalid season input");
+					else
+						validInput = true;
+					
 					// If season input is greater than season count, set it to the latest season
-					else if (seasonInput > show.getSeasons())				
+					if (seasonInput > show.getSeasons())				
 						seasonInput = show.getSeasons();
-				} while(seasonInput < 0);
+				} while(!validInput);
 				
 				// Prompt user for show status
+				validInput = false;
 				int statusInput;
 				do {
 					System.out.println("==Show Status Options==");
-					System.out.println("Enter a [Show Status]:");
+					System.out.println("Enter a [Show Status], or [-1] to make no update:");
 					System.out.println("[1] Watching");
 					System.out.println("[2] Completed");
 					System.out.println("[3] On Hold");
 					System.out.println("[4] Dropped");	
-					System.out.println("[5] Plan to watch ");
+					System.out.println("[5] Plan to watch");
 					statusInput=sc.nextInt();
-					if(statusInput < 1 || statusInput > 5)
+
+					if(statusInput == -1) {
+						statusInput = tracker.getStatusId();
+						validInput = true;
+					}
+					else if(statusInput < 1 || statusInput > 5) {
 						System.out.println("Invalid option");
-				} while(statusInput < 1 || statusInput > 5);
+					}
+					else {
+						validInput = true;
+						statusInput--;	// Change input to the status's actual ID
+					}
+						
+				} while(!validInput);
 				
-				Tracker newTracker = new Tracker(sessionID, show.getId(), episodeInput, seasonInput, --statusInput);
+				Tracker newTracker = new Tracker(sessionId, show.getId(), episodeInput, seasonInput, statusInput);
 				if (db.updateTracker(newTracker)) {
 					System.out.println("-------------------------------------------------------------------------------------");
 					System.out.println("Updated tracker for " + show.getTitle());
 				}
-				else 
+				else {
 					System.out.println("Failed to update");
+					System.out.println();
+				}
 				
 				return; // Return to previous menu
 			}
@@ -268,7 +301,7 @@ public class ConsoleMenu {
 	
 	private void addMenu(Scanner sc) {
 		List<Show> shows = db.getAllShows(); 
-		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
+		List<Tracker> trackers = db.getAllUserTrackers(sessionId);
 		System.out.println("=====Add a Tracker=====");
 		Helper.printShowsWithIndex(shows);
 		System.out.format("%10s%-35s",
@@ -355,7 +388,7 @@ public class ConsoleMenu {
 						validInput = true;
 				} while(!validInput);
 				
-				Tracker newTracker = new Tracker(sessionID, showInput, episodeInput, seasonInput, --statusInput);
+				Tracker newTracker = new Tracker(sessionId, showInput, episodeInput, seasonInput, --statusInput);
 				if (db.addTracker(newTracker)) {
 					System.out.println("-------------------------------------------------------------------------------------");
 					System.out.println("Now tracking " + show.getTitle());
@@ -379,7 +412,7 @@ public class ConsoleMenu {
 	
 	private void deleteMenu(Scanner sc) {
 		// Print the user's trackers
-		List<Tracker> trackers = db.getAllUserTrackers(sessionID);
+		List<Tracker> trackers = db.getAllUserTrackers(sessionId);
 		System.out.println("==Delete a Tracker==");
 		Helper.printTrackersWithIndex(trackers, db); 
 		System.out.format("%9s%-10s", "[0] ", "Go back");
